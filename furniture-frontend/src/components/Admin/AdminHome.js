@@ -7,7 +7,7 @@ import {
   LinearScale,
   BarElement,
   LineElement,
-  PointElement, // Ensure this is registered
+  PointElement,
   ArcElement,
   Title,
   Tooltip,
@@ -22,14 +22,11 @@ import {
   Grid,
   Card,
   CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   CircularProgress,
   Box,
 } from '@mui/material';
+
+import AdminSidebar from './AdminSidebar';  // Import AdminSidebar
 
 // Register all necessary elements with Chart.js
 ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, ArcElement, Title, Tooltip, Legend);
@@ -47,6 +44,7 @@ const AdminHome = () => {
   const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeSection, setActiveSection] = useState('dashboard');  // active section for the sidebar
 
   useEffect(() => {
     fetchAnalytics();
@@ -85,7 +83,7 @@ const AdminHome = () => {
       </ThemeProvider>
     );
 
-  const { totalOrders, totalRevenue, recentOrders, ordersByStatus, revenueHistory, orderTrends } = analytics || {};
+  const { totalOrders, totalRevenue, revenueHistory, orderTrends, ordersByStatus } = analytics || {};
 
   const revenueChartData = revenueHistory?.length
     ? {
@@ -135,71 +133,81 @@ const AdminHome = () => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
-      <Container>
-        <Typography variant="h4" color="primary" gutterBottom>
-          Admin Dashboard
-        </Typography>
-        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-          <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Total Orders</Typography>
-                <Typography variant="h4">{totalOrders || 0}</Typography>
-              </CardContent>
-            </Card>
+      <Box sx={{ display: 'flex' }}>
+        {/* Sidebar Component */}
+        <AdminSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
+
+        {/* Main Content */}
+        <Container sx={{ marginLeft: '260px', flexGrow: 1, marginBottom: '100px', marginTop: '30px' }}>
+          {/* <Typography variant="h2" color="primary" gutterBottom>
+            Analytics
+          </Typography> */}
+
+          {/* Cards for Summary */}
+          <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Total Orders</Typography>
+                  <Typography variant="h4">{totalOrders || 0}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Total Revenue</Typography>
+                  <Typography variant="h4">${totalRevenue ? totalRevenue.toFixed(2) : '0.00'}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Total Revenue</Typography>
-                <Typography variant="h4">Rs.{totalRevenue ? totalRevenue.toFixed(2) : '0.00'}</Typography>
-              </CardContent>
-            </Card>
+
+          {/* Charts */}
+          <Grid container spacing={3} sx={{ marginBottom: 3 }}>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Revenue Over Time</Typography>
+                  {revenueHistory?.length > 0 ? (
+                    <Line data={revenueChartData} options={{ responsive: true }} height={150} />
+                  ) : (
+                    <Typography color="textSecondary">No revenue data available</Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Orders Over Time</Typography>
+                  {orderTrends?.length > 0 ? (
+                    <Line data={orderTrendsChartData} options={{ responsive: true }} height={150} />
+                  ) : (
+                    <Typography color="textSecondary">No orders data available</Typography>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Orders by Status</Typography>
+                  <Bar data={ordersByStatusData} options={{ responsive: true }} height={150} />
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6">Order Distribution</Typography>
+                  <Doughnut data={ordersByStatusData} options={{ responsive: true }} height={150} />
+                </CardContent>
+              </Card>
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid container spacing={3} sx={{ marginBottom: 3 }}>
-          <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Revenue Over Time</Typography>
-                {revenueHistory?.length > 0 ? (
-                  <Line data={revenueChartData} options={{ responsive: true }} height={150} />
-                ) : (
-                  <Typography color="textSecondary">No revenue data available</Typography>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Orders Over Time</Typography>
-                {orderTrends?.length > 0 ? (
-                  <Line data={orderTrendsChartData} options={{ responsive: true }} height={150} />
-                ) : (
-                  <Typography color="textSecondary">No orders data available</Typography>
-                )}
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Orders by Status</Typography>
-                <Bar data={ordersByStatusData} options={{ responsive: true }} height={150} />
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Card>
-              <CardContent>
-                <Typography variant="h6">Order Distribution</Typography>
-                <Doughnut data={ordersByStatusData} options={{ responsive: true }} height={150} />
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Container>
+        </Container>
+      </Box>
     </ThemeProvider>
   );
 };

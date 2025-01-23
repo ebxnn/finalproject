@@ -1,4 +1,3 @@
-// src/components/AdminSidebar.js
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'; // Import toast
@@ -20,11 +19,11 @@ const AdminSidebar = ({ activeSection, setActiveSection }) => {
       </div>
       <nav className="mt-6">
         <ul className="space-y-4">
-          {/* <li className={`px-4 py-2 rounded-lg ${activeSection === 'dashboard' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
-            <Link to="/admin/dashboard" onClick={() => setActiveSection('dashboard')} className="flex items-center text-white">
-              Dashboard
+          <li className={`px-4 py-2 rounded-lg ${activeSection === 'analytics' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
+            <Link to="/admin" onClick={() => setActiveSection('analytics')} className="flex items-center text-white">
+              Analytics
             </Link>
-          </li> */}
+          </li>
           <li className={`px-4 py-2 rounded-lg ${activeSection === 'products' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
             <Link to="/admin/products" onClick={() => setActiveSection('products')} className="flex items-center text-white">
               Products

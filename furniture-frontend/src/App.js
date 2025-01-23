@@ -34,15 +34,15 @@ import AdminHome from './components/Admin/AdminHome.js';
 
 const App = () => (
   <Router>
-    
+
     <Routes>
       <Route path="/" element={<><Header /><Home /></>} />
       <Route path="/products" element={<><Header /><CategoriesPage /></>} />
       <Route path="/wishlist" element={<><Header /><Wishlist /></>} />
       <Route path="/login" element={<Login />} />
       <Route path="/seller" element={<><Header /><Seller /></>} />
-      <Route path="/stocks" element={<StockManagement />} /> 
-      <Route path="/admin" element={<Dashboard />} />
+      <Route path="/stocks" element={<StockManagement />} />
+      {/* <Route path="/admin" element={<Dashboard />} /> */}
       <Route path="/admin/products" element={<AdminProductPage />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/products/:id" element={<><Header /><ProductDetails /></>} />
@@ -53,18 +53,18 @@ const App = () => (
       <Route path="/add-product" element={<AddProduct />} />
       <Route path="/view-products" element={<ViewProduct />} /> {/* Changed to ViewProduct */}
       <Route path="/admin/sellers" element={<AdminSellersPage />} /> {/* Changed to AdminSellersPage */}
-      <Route path="/admin/users" element={<AdminUserPage />} /> 
-      <Route path="/checkout" element={<><Header/><Checkout /></>} /> 
+      <Route path="/admin/users" element={<AdminUserPage />} />
+      <Route path="/checkout" element={<><Header /><Checkout /></>} />
       <Route path="/order-details/:orderId" element={<><Header /><OrderDetails /></>} />
-      <Route path="/search" element={<><Header /><SearchResultsPage /></>} /> 
-      <Route path="/order-history" element={<><Header /><OrderHistory /></>} /> 
+      <Route path="/search" element={<><Header /><SearchResultsPage /></>} />
+      <Route path="/order-history" element={<><Header /><OrderHistory /></>} />
       <Route path="/ProfileView" element={<ProfileView />} />
       <Route path="/lighting" element={<><Header /><LightingPage /></>} /> {/* Added category page */}
       <Route path="/decoration" element={<><Header /><DecorationPage /></>} /> {/* Added category page */}
       <Route path="/beds" element={<><Header /><BedsPage /></>} /> {/* Added category page */}
       <Route path="/furniture" element={<><Header /><FurniturePage /></>} /> {/* Added category page */}
-      <Route path="/admin/analytics" element={<><Header /><AdminHome /></>} /> {/* Added admin home page */}
-      
+      <Route path="/admin" element={<AdminHome />} /> {/* Added admin home page */}
+
     </Routes>
   </Router>
 );
