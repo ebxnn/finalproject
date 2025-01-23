@@ -25,6 +25,8 @@ import allOrderRoutes from './routes/profile/allOrderRoutes.js';
 import orderViewRoutes from './routes/seller/orderViewRoutes.js';
 import sellerProfileRoutes from './routes/seller/sellerProfileRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js';
+import adminRoute from './routes/Admin/adminRoutes.js';
+
 const app = express();
 const port = 5000;
 connectDB();
@@ -38,7 +40,7 @@ app.use(cors());
 app.use(express.json());
 
 const corsOptions = {
-  origin: 'http://localhost:3001',  // Frontend URL
+  origin: 'http://localhost:3000',  // Frontend URL
   methods: 'GET,POST,DELETE,PATCH',  // Allowed methods
   allowedHeaders: 'Content-Type, Authorization',  // Allowed headers
 };
@@ -69,6 +71,8 @@ app.use('/api/order/user-orders', allOrderRoutes);
 app.use('/api/seller-orders', orderViewRoutes)
 app.use('/api/sellersProfile', sellerProfileRoutes); // Mount the seller routes
 app.use('/api/category', categoryRoutes); // Mount the category routes
+
+app.use('/api/admin/analytics', adminRoute); // Mount the category routes
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });

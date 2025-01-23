@@ -30,6 +30,7 @@ import LightingPage from './components/category/LightingPage.js'
 import DecorationPage from './components/category/DecorationPage.js'
 import BedsPage from './components/category/BedsPage.js'
 import FurniturePage from './components/category/FurniturePage.js';
+import AdminHome from './components/Admin/AdminHome.js';
 
 const App = () => (
   <Router>
@@ -62,6 +63,8 @@ const App = () => (
       <Route path="/decoration" element={<><Header /><DecorationPage /></>} /> {/* Added category page */}
       <Route path="/beds" element={<><Header /><BedsPage /></>} /> {/* Added category page */}
       <Route path="/furniture" element={<><Header /><FurniturePage /></>} /> {/* Added category page */}
+      <Route path="/admin/analytics" element={<><Header /><AdminHome /></>} /> {/* Added admin home page */}
+      
     </Routes>
   </Router>
 );
