@@ -1,0 +1,158 @@
+/* Dark Theme Cart Container */
+.cart-container {
+    margin: 60px auto;
+    padding: 20px;
+    background-color: #121212; /* Dark background */
+    border-radius: 10px;
+    max-width: 1200px;
+    color: #e0e0e0; /* Light text color for readability */
+    font-family: 'Roboto', sans-serif; /* Modern font */
+}
+
+/* Cart Title */
+.cart-title {
+    font-size: 32px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 40px;
+    color: #fff; /* White for the title */
+}
+
+/* Cart Grid Layout */
+.cart-grid {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 20px;
+}
+
+/* Cart Items Section */
+.cart-items {
+    background-color: transparent; /* No background */
+    padding: 20px;
+}
+
+/* Cart Item */
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #333; /* Subtle bottom border */
+}
+
+/* Last item without bottom border */
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+/* Product Image */
+.cart-item-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 20px;
+}
+
+/* Product Details */
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e0e0e0; /* Light text color */
+}
+
+.cart-item-price {
+    font-size: 16px;
+    font-weight: 500;
+    color: #b0b0b0; /* Slightly lighter for contrast */
+}
+
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+/* Quantity Input */
+.cart-quantity-input {
+    width: 40px;
+    padding: 5px;
+    text-align: center;
+    margin-right: 10px;
+    background-color: #333; /* Darker input background */
+    color: #e0e0e0; /* Light text color */
+    border: none;
+    border-radius: 4px;
+}
+
+/* Remove Button */
+.cart-item-remove {
+    background-color: transparent; /* No background for a modern look */
+    color: #ff5252; /* Red color for remove action */
+    font-size: 20px;
+    cursor: pointer;
+    border: 2px solid #ff5252; /* Add border to match text color */
+    border-radius: 5px; /* Rounded corners */
+    padding: 8px 12px; /* Padding for a button-like feel */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition effects */
+}
+
+/* Hover Effect */
+.cart-item-remove:hover {
+    background-color: #ff5252; /* Red background on hover */
+    color: #fff; /* Change text color to white */
+}
+/* Cart Summary Section */
+.cart-summary {
+    background-color: transparent; /* No background */
+    padding: 20px;
+}
+
+/* Summary Details */
+.cart-summary h5 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #fff; /* White for headings */
+}
+
+.cart-summary .summary-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 18px;
+    color: #b0b0b0; /* Slightly lighter for contrast */
+}
+
+.cart-summary .summary-total {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff; /* White for total */
+    margin-top: 20px;
+    padding-top: 15px;
+}
+
+/* Checkout Button */
+.cart-summary .checkout-btn {
+    background-color: #ff8c00; /* Bright button color */
+    color: #fff;
+    padding: 12px;
+    border: none;
+    width: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s;
+}
+
+.cart-summary .checkout-btn:hover {
+    background-color: #ff6f00; /* Darken button on hover */
+}
+
+/* Add this to import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');

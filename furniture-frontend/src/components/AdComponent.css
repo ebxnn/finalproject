@@ -1,0 +1,42 @@
+.ad-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-size: cover; 
+    background-position: center; 
+    padding: 20px; 
+    color: #fff; 
+    height: 650px;
+}
+
+.ad-content {
+    max-width: 50%; 
+    padding: 120px;
+}
+
+.ad-title {
+    margin: 10px 0;
+}
+
+.ad-subtitle {
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.ad-description {
+    margin: 10px 0;
+}
+
+.ad-button {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.ad-button:hover {
+    background-color: #41db77; 
+}
+

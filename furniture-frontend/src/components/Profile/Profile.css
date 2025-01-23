@@ -1,0 +1,147 @@
+/* Profile.css */
+
+/* Body Styles */
+body {
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light gray text */
+    font-family: 'Arial', sans-serif; /* Clean and modern font */
+}
+
+/* Profile Container */
+.profile-container {
+    max-width: 100%; /* Full width for sidebar and content */
+}
+
+/* Sidebar Styles */
+.sidebar {
+    background-color: #1e1e1e; /* Slightly lighter dark background for sidebar */
+    color: #e0e0e0; /* Light gray text */
+    height: 100vh; /* Full height */
+    padding: 20px; /* Padding for sidebar */
+    border-right: 1px solid #333; /* Subtle border for separation */
+}
+
+.sidebar-title {
+    margin-bottom: 20px; /* Space below title */
+}
+
+.nav-link {
+    color: #b0bec5; /* Soft gray for links */
+    transition: color 0.2s; /* Transition effect for hover */
+}
+
+.nav-link:hover {
+    color: #80cbc4; /* Bright cyan on hover */
+}
+
+.nav-item {
+    margin-bottom: 10px; /* Space between nav items */
+}
+
+/* Card Styles */
+.card {
+    background-color: #1e1e1e; /* Dark card background */
+    border: none; /* Remove border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Soft shadow */
+}
+
+/* Card Header Styles */
+.card-header {
+    background-color: #292929; /* Darker background for header */
+    color: #e0e0e0; /* Light gray text */
+    padding: 15px; /* Padding for the header */
+    border-top-left-radius: 8px; /* Rounded top corners */
+    border-top-right-radius: 8px; /* Rounded top corners */
+}
+
+/* Form Styles */
+form {
+    margin-top: 20px; /* Space above the form */
+}
+
+/* Input Field Styles */
+.form-control {
+    background-color: #424242; /* Dark input fields */
+    border: 1px solid #616161; /* Gray border */
+    color: #e0e0e0; /* Light gray text */
+    border-radius: 4px; /* Rounded corners */
+    padding: 10px; /* Padding inside inputs */
+    transition: border-color 0.2s; /* Transition for border color */
+}
+
+.form-control:focus {
+    border-color: #80cbc4; /* Bright cyan border on focus */
+    box-shadow: 0 0 5px rgba(0, 201, 201, 0.5); /* Subtle cyan shadow on focus */
+}
+
+/* Label Styles */
+.form-label {
+    font-weight: bold; /* Bold labels */
+    color: #b0bec5; /* Soft gray labels */
+}
+
+/* Button Styles */
+.btn {
+    border-radius: 4px; /* Rounded button corners */
+    padding: 10px 20px; /* Button padding */
+    font-weight: bold; /* Bold text for buttons */
+}
+
+.btn-success {
+    background-color: #00c853; /* Bright green background */
+    color: white; /* White text */
+    transition: background-color 0.2s; /* Transition for button color */
+}
+
+.btn-success:hover {
+    background-color: #009624; /* Darker green on hover */
+}
+
+.btn-outline-danger {
+    border-color: #ff5252; /* Red border */
+    color: #ff5252; /* Red text */
+}
+
+.btn-outline-danger:hover {
+    background-color: #ff5252; /* Red background on hover */
+    color: white; /* White text */
+}
+
+/* Alert Styles */
+.alert {
+    margin-top: 20px; /* Space above alerts */
+    background-color: #f44336; /* Red background */
+    color: white; /* White text for alerts */
+}
+
+/* Text Centering */
+.text-center {
+    text-align: center; /* Center text */
+}
+
+/* Loading and Error States */
+.text-warning {
+    font-size: 1.2rem; /* Slightly larger font for loading */
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    .sidebar {
+        position: relative; /* Relative positioning for smaller screens */
+        height: auto; /* Auto height */
+    }
+
+    .card-header {
+        font-size: 1.2rem; /* Smaller font size on smaller screens */
+    }
+
+    .btn {
+        width: 100%; /* Full width buttons on small screens */
+        margin-top: 10px; /* Margin on top */
+    }
+}

@@ -1,0 +1,74 @@
+import express from 'express';
+import cors from 'cors';
+import connectDB from './config/db.js';
+
+//Authentication
+import loginRoutes from './routes/loginRoutes.js';
+import SignupRoutes from './routes/SignupRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+//seller
+import ProductReview from './routes/ProductReview.js';
+import WishlistRoutes from './routes/WishlistRoutes.js';
+import SellerRoutes from './routes/SellerRoutes.js';
+import auth from  './routes/auth.js';
+import  verifyToken  from './middleware/authenticateToken.js';
+import userDetailsRouter from './routes/UserDetailsRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
+import upload from './middleware/upload.js'; // Adjust the path as necessary
+import path from 'path'; 
+import sellerRoutes from './routes/Admin/sellerRoutes.js';
+import userRoutes from './routes/Admin/userRoutes.js';
+import checkoutRoutes from './routes/payment/checkoutRoutes.js';
+import orderRoutes from './routes/payment/orderRoutes.js';
+import searchRoutes from './routes/search/searchRoutes.js';
+import allOrderRoutes from './routes/profile/allOrderRoutes.js';
+import orderViewRoutes from './routes/seller/orderViewRoutes.js';
+import sellerProfileRoutes from './routes/seller/sellerProfileRoutes.js'
+import categoryRoutes from './routes/categoryRoutes.js';
+const app = express();
+const port = 5000;
+connectDB();
+
+
+
+app.use(cors());
+
+
+
+app.use(express.json());
+
+const corsOptions = {
+  origin: 'http://localhost:3001',  // Frontend URL
+  methods: 'GET,POST,DELETE,PATCH',  // Allowed methods
+  allowedHeaders: 'Content-Type, Authorization',  // Allowed headers
+};
+
+app.use(cors(corsOptions));
+
+
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+
+// Static folder for serving uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Use __dirname correctly
+
+app.use('/api/login', loginRoutes);
+app.use('/api/user/signup', SignupRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/products', ProductReview);
+app.use('/api/wishlist', WishlistRoutes); //
+app.use('/api/seller/signup', SellerRoutes); //
+// app.use('/api/auth', auth);
+app.use('/api/userDetails', userDetailsRouter);
+app.use('/api/cart', cartRoutes); //z
+app.use('/api/admin/sellers', sellerRoutes);
+app.use('/api/admin', userRoutes); 
+app.use('/api/checkout', checkoutRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/order/user-orders', allOrderRoutes); 
+app.use('/api/seller-orders', orderViewRoutes)
+app.use('/api/sellersProfile', sellerProfileRoutes); // Mount the seller routes
+app.use('/api/category', categoryRoutes); // Mount the category routes
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});

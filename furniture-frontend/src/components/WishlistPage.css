@@ -1,0 +1,130 @@
+/* General Container for Wishlist */
+.wishlist-component {
+  margin: 40px 0;
+  padding: 0 15px;
+  background-color: #060505; /* Light background for a clean look */
+  color: #333; /* Dark text for contrast */
+  min-height: 100vh;
+}
+
+/* Wishlist Title */
+.wishlist-component .wishlist-title {
+  font-size: 28px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+/* Wishlist Grid */
+.wishlist-component .wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Responsive grid */
+  gap: 30px; /* Space between items */
+}
+
+/* Card Design */
+.wishlist-component .wishlist-card {
+  background-color: #fff; /* White card background */
+  border-radius: 8px; /* Rounded corners */
+  overflow: hidden; /* Rounded corners for images */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  transition: transform 0.3s ease, box-shadow 0.3s; /* Smooth transition */
+}
+
+.wishlist-component .wishlist-card:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
+}
+
+/* Image */
+.wishlist-component .wishlist-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* Body */
+.wishlist-component .wishlist-body {
+  padding: 20px;
+  text-align: center;
+}
+
+/* Product Name */
+.wishlist-component .wishlist-item-name {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 15px 0;
+  color: #333;
+}
+
+/* Product Price */
+.wishlist-component .wishlist-price {
+  font-size: 16px;
+  color: #ff4081; /* Pinkish price color for elegance */
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+/* Button Group */
+.wishlist-component .wishlist-btn-group {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px; /* Space above buttons */
+}
+
+.wishlist-component .wishlist-move-btn,
+.wishlist-component .wishlist-remove-btn {
+  background-color: transparent; /* Transparent background for modern look */
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  transition: background-color 0.3s, color 0.3s, transform 0.3s;
+  cursor: pointer; /* Pointer on hover */
+}
+
+/* Move to Bag Button */
+.wishlist-component .wishlist-move-btn {
+  border-color: #ff4081; /* Match button color with price */
+  color: #ff4081;
+}
+
+.wishlist-component .wishlist-move-btn:hover {
+  background-color: #ff4081;
+  color: #fff;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* Remove Button */
+.wishlist-component .wishlist-remove-btn {
+  border-color: #f44336; /* Red border for remove */
+  color: #f44336;
+}
+
+.wishlist-component .wishlist-remove-btn:hover {
+  background-color: #f44336;
+  color: #fff;
+  transform: translateY(-2px); /* Slight lift on hover */
+}
+
+/* Loading and error states */
+.wishlist-component .wishlist-loading {
+  text-align: center;
+  margin-top: 50px;
+  color: #333;
+}
+
+.wishlist-component .wishlist-error {
+  text-align: center;
+  color: #f44336;
+  margin-top: 50px;
+}
+
+.wishlist-component .wishlist-empty-msg {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}

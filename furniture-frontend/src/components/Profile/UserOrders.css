@@ -1,0 +1,94 @@
+/* UserOrders.css */
+
+.orders-container {
+    font-family: Arial, sans-serif; /* Apply font to container */
+    background-color: #f4f4f4; /* Background for the container */
+    padding: 20px; /* Padding around the content */
+    max-width: 1200px; /* Max width for the container */
+    margin: auto; /* Center the container */
+    text-align: center; /* Center text within the container */
+}
+
+h1 {
+    color: #333; /* Header color */
+    margin-bottom: 30px; /* Space below header */
+}
+
+.orders-grid {
+    display: grid; /* Use CSS grid for layout */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Responsive columns */
+    gap: 20px; /* Space between grid items */
+}
+
+.order-card {
+    background: white; /* Background for order cards */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow for depth */
+    transition: transform 0.3s, box-shadow 0.3s; /* Animation on hover */
+    overflow: hidden; /* Prevent overflow of child elements */
+}
+
+.order-card:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Darker shadow on hover */
+}
+
+.order-card img {
+    width: 100%; /* Full width of the card */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.order-details {
+    padding: 15px; /* Padding inside the order details */
+}
+
+.order-details h2 {
+    font-size: 20px; /* Font size for order title */
+    color: #333; /* Color for order title */
+}
+
+.order-details p {
+    color: #666; /* Color for order details */
+    margin: 5px 0; /* Space between details */
+}
+
+.view-details {
+    margin: 15px; /* Margin around the button */
+    padding: 10px 15px; /* Padding for the button */
+    background-color: #007bff; /* Button color */
+    color: white; /* Button text color */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer on hover */
+    font-size: 16px; /* Font size for button text */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.view-details:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Loader styles */
+.loader {
+    text-align: center; /* Center loader text */
+    margin-top: 50px; /* Space above loader */
+}
+
+.spinner {
+    border: 8px solid #f3f3f3; /* Light gray border */
+    border-top: 8px solid #3498db; /* Blue top border */
+    border-radius: 50%; /* Circular spinner */
+    width: 50px; /* Width of the spinner */
+    height: 50px; /* Height of the spinner */
+    animation: spin 2s linear infinite; /* Animation */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); } /* Start position */
+    100% { transform: rotate(360deg); } /* End position */
+}
+
+.error {
+    color: red; /* Error message color */
+    margin-top: 20px; /* Space above error message */
+}

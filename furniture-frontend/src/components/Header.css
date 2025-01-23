@@ -1,0 +1,257 @@
+.header-container {
+  padding: 10px 0;
+  background-color: #0a0a0a;
+}
+
+.logo {
+  height: 60px;
+}
+.logo-link {
+  color: #0abd49;
+}
+
+/* Flexbox for navbar items */
+.navbar-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.nav-link {
+  font-size: 11px;
+  font-weight: 600;
+  color: #f8f5f5;
+  margin-right: 10px;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: color 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+  color: #12f09e;
+}
+
+.icon-label {
+  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #fffefe;
+}
+
+.search-bar {
+  position: relative;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.search-input {
+  width: 300px;
+  padding: 8px 15px 8px 40px;
+  border-radius: 2px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  color: #0a0a0a;
+  background-color: #e8e7e7;
+  border-radius: 10px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+.search-input:focus {
+  border-color: #ffffff;
+  outline: none;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  color: #666;
+}
+
+/* Reduced margin between icons */
+.navbar-nav.ml-auto .nav-link {
+  margin-left: 5px;
+}
+
+.navbar-nav.ml-auto .nav-link:hover {
+  color: #ff3f6c;
+}
+
+/* Responsive styles */
+@media (max-width: 992px) {
+  .search-bar {
+      width: 100%;
+      margin-bottom: 15px;
+  }
+
+  .search-input {
+      width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column;
+  }
+
+  .navbar-nav {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .search-bar {
+      width: 100%;
+      margin-bottom: 15px;
+  }
+
+  .search-input {
+      width: 100%;
+  }
+
+  .navbar-nav.ml-auto .nav-link {
+    font-size: 10px;
+    margin-left: 0;
+    margin-right: 10px;
+  }
+
+  .logo {
+    height: 50px;
+  }
+
+  .navbar-brand {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-nav {
+    display: none; /* Hide navbar links on small screens */
+  }
+
+  .search-bar {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .header-container {
+    align-items: center;
+  }
+
+  .logo {
+    height: 45px;
+  }
+}
+/* Dropdown container */
+.dropdown-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Dropbtn styling */
+.dropbtn {
+  cursor: pointer;
+  color: #f8f5f5; /* Lighter color to contrast with dark background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-right: 10px;
+}
+
+/* Dropdown content styling */
+.dropdown-content {
+  display: none; /* Hidden by default */
+  position: absolute;
+  top: 50px; /* Adjusted position to fit under the button */
+  right: 0;
+  background-color: #1a1a1a; /* Dark background */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Soft shadow */
+  border-radius: 4px;
+  min-width: 160px;
+  z-index: 1000;
+}
+
+/* Show dropdown content when the dropdown is open */
+.dropdown-container .dropdown-content {
+  display: block; /* Show dropdown when open */
+}
+
+/* Dropdown items */
+.dropdown-content a,
+.dropdown-content button {
+  padding: 12px 16px; /* Adjusted padding for better spacing */
+  color: #f8f5f5; /* White font color */
+  text-decoration: none;
+  display: flex; /* Use flexbox to align icons and text */
+  align-items: center; /* Center vertically */
+  background: transparent; /* Transparent background */
+  border: none; /* No borders for buttons */
+  cursor: pointer; /* Change cursor to pointer */
+  transition: background-color 0.2s ease-in-out; /* Smooth hover transition */
+}
+
+/* Hover effect for dropdown items */
+.dropdown-content a:hover,
+.dropdown-content button:hover {
+  background-color: #333333; /* Slightly lighter background on hover */
+}
+
+/* Add margin between icon and text */
+.dropdown-content a .icon,
+.dropdown-content button .icon {
+  margin-right: 8px; /* Space between icon and text */
+  font-size: 18px; /* Adjust icon size */
+}
+
+/* Header.css */
+.search-results {
+  position: absolute;
+  top: 60px;
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 10px;
+}
+
+.search-result-item {
+  display: block;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+}
+
+.search-result-item:hover {
+  background-color: #f1f1f1;
+}
+
+.search-results-container {
+  position: absolute;
+  top: 60px; /* Adjust as needed */
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  z-index: 100;
+  max-height: 300px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.search-result-item {
+  display: block;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #ddd;
+}
+
+.search-result-item:hover {
+  background-color: #f0f0f0;
+}

@@ -1,0 +1,49 @@
+.admin-product-page {
+  padding: 20px;
+  background-color: #121212; /* Dark background color */
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #ffffff; /* Light text color for the header */
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+.product-table th,
+.product-table td {
+  padding: 10px 15px;
+  text-align: left;
+  border: 1px solid #444; /* Dark border color */
+  font-size: 14px; /* Smaller font size for compactness */
+  color: #ffffff; /* Light text color for table cells */
+}
+
+.product-table th {
+  background-color: #1e1e1e; /* Darker header background */
+  color: #bb86fc; /* Purple text color for header */
+  font-weight: bold;
+}
+
+.product-table tbody tr:hover {
+  background-color: #333; /* Slightly lighter background on hover */
+}
+
+.product-image {
+  width: 100px !important; /* Force smaller width */
+  height: 100px !important; /* Force a fixed height for uniformity */
+  object-fit: cover; /* Ensures the image is resized properly */
+  border-radius: 4px; /* Slightly rounded corners for images */
+}
+
+.product-table td:last-child {
+  text-align: center; /* Center align status column */
+}

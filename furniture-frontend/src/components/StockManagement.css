@@ -1,0 +1,85 @@
+.stock-management {
+  display: flex;
+  font-family: Arial, sans-serif; /* Use a clean font */
+}
+
+.sidebar {
+  width: 200px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-right: 1px solid #ccc;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+h2 {
+  margin-bottom: 10px;
+  color: #333; /* Darker color for better visibility */
+}
+
+form {
+  display: flex;
+  flex-direction: column; /* Arrange elements in a column */
+}
+
+form input,
+form select,
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
+form button:hover {
+  background-color: #0056b3;
+}
+
+.error {
+  color: red;
+  font-size: 0.9em;
+  margin-bottom: 10px; /* Space below error messages */
+}
+
+/* Image URL section styling */
+.image-urls {
+  display: flex;
+  flex-wrap: wrap; /* Allow images to wrap */
+  margin: 10px 0;
+}
+
+.image-url {
+  position: relative; /* For the remove button */
+  margin-right: 10px;
+}
+
+.image-url img {
+  max-width: 100px; /* Limit image size */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.image-url button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: red;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 50%; /* Round button */
+  width: 20px;
+  height: 20px;
+}

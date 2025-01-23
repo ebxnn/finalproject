@@ -1,0 +1,62 @@
+/* AdminDashboard.css */
+
+.admin-sidebar {
+    background-color: #ffffff;
+    transition: width 0.3s ease;
+    position: relative;
+    border-right: 1px solid #e0e0e0;
+  }
+  
+  .admin-sidebar.open .logo-text {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  
+  .admin-sidebar.closed .logo-text {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  .admin-sidebar a {
+    color: #1976d2;
+    text-decoration: none;
+    display: block;
+    transition: color 0.3s ease;
+  }
+  
+  .admin-sidebar a:hover {
+    color: #004ba0;
+  }
+  
+  .admin-sidebar .list-item {
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-sidebar .list-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .admin-stat-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .admin-stat-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .admin-performance-section .MuiPaper-root {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .admin-performance-section .MuiPaper-root:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  }
+  
