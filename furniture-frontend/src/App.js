@@ -31,6 +31,10 @@ import DecorationPage from './components/category/DecorationPage.js'
 import BedsPage from './components/category/BedsPage.js'
 import FurniturePage from './components/category/FurniturePage.js';
 import AdminHome from './components/Admin/AdminHome.js';
+import DesignerDashboard from './components/designer/DesignerDashboard.js';
+import Sofa from './components/designer/sofa.js';
+import SofaConfigurator from './components/designer/SofaConfigurator.js';
+import CouchConfigurator from './components/designer/couch.js';
 
 const App = () => (
   <Router>
@@ -64,6 +68,10 @@ const App = () => (
       <Route path="/beds" element={<><Header /><BedsPage /></>} /> {/* Added category page */}
       <Route path="/furniture" element={<><Header /><FurniturePage /></>} /> {/* Added category page */}
       <Route path="/admin" element={<AdminHome />} /> {/* Added admin home page */}
+      <Route path="/designer" element={<DesignerDashboard />} />
+      <Route path="/sofa-1" element={<Sofa />} />
+      <Route path="/sofa-2" element={<SofaConfigurator />} />
+      <Route path="/sofa-3" element={<CouchConfigurator />} />
 
     </Routes>
   </Router>

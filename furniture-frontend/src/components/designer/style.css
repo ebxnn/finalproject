@@ -1,0 +1,83 @@
+/* Layout of the container, sidebar and 3D view area */
+.container {
+    display: flex;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    padding: 20px;
+    background-color: #000000;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+  
+  .right-side {
+      margin: 0; /* Remove any margin */
+      width: 100vw; /* Full viewport width */
+      height: 0vh; /* Full viewport height */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+  
+  .color-picker {
+    margin-bottom: 15px;
+  }
+  
+  .color-picker div {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .color-picker button {
+    width: 30px;
+    height: 30px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  
+  .color-picker button:hover {
+    transform: scale(1.1);
+  }
+  
+  .add-pillow-button {
+    padding: 10px 20px;
+    margin-top: 15px;
+    background-color: #3e2723;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-pillow-button:hover {
+    background-color: #b25f4b;
+  }
+  
+  button {
+    padding: 8px 16px;
+    margin-top: 10px;
+    background-color: #3e2723;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #b25f4b;
+  }
+  
+  h3 {
+      color: aliceblue;
+  }       
+  
+  h4 {
+      color: aqua;
+  }

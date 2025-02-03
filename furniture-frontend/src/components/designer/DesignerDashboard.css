@@ -1,0 +1,107 @@
+/* Overall Dashboard Layout */
+.dashboard-container {
+    @apply flex h-screen overflow-hidden bg-gray-900;
+  }
+  
+  /* Sidebar Styling */
+  .sidebar {
+    @apply fixed left-0 top-0 h-full w-64 bg-gray-800 text-white p-6 shadow-lg;
+  }
+  
+  .sidebar .sidebar-header {
+    @apply text-xl font-bold mb-4;
+  }
+  
+  .sidebar .sidebar-nav {
+    @apply flex flex-col gap-4;
+  }
+  
+  .sidebar .sidebar-nav button {
+    @apply text-white text-left hover:bg-blue-700 py-2 px-4 rounded-md;
+  }
+  
+  .sidebar .sidebar-nav button:hover {
+    @apply bg-blue-700;
+  }
+  
+  /* Main Content Styling */
+  .main-content {
+    @apply flex-1 ml-64 p-6 overflow-auto;
+  }
+  
+  /* Header Styling */
+  .header {
+    @apply bg-gray-800 text-white p-4 shadow-md;
+  }
+  
+  .header .header-title {
+    @apply text-2xl font-semibold;
+  }
+  
+  .header .menu-icon {
+    @apply text-white;
+  }
+  
+  /* Model Cards */
+  .model-card {
+    @apply bg-gray-800 text-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105;
+  }
+  
+  .model-card .model-viewer {
+    @apply p-4 flex justify-center items-center bg-gray-900;
+  }
+  
+  .model-card .model-info {
+    @apply p-4;
+  }
+  
+  .model-card .model-info h6 {
+    @apply text-xl font-bold;
+  }
+  
+  .model-card .model-info p {
+    @apply text-sm mt-2;
+  }
+  
+  .model-card .actions {
+    @apply mt-4 flex justify-center space-x-4;
+  }
+  
+  .model-card .actions button {
+    @apply py-2 px-4 rounded-md;
+  }
+  
+  /* Buttons */
+  .button-approve {
+    @apply bg-blue-500 hover:bg-blue-600 text-white rounded-md py-2 px-4 transition;
+  }
+  
+  .button-reject {
+    @apply bg-red-500 hover:bg-red-600 text-white rounded-md py-2 px-4 transition;
+  }
+  
+  .button-design {
+    @apply bg-green-500 hover:bg-green-600 text-white rounded-md py-2 px-4 transition;
+  }
+  
+  /* Responsive Layout */
+  @media (max-width: 1024px) {
+    .main-content {
+      @apply ml-0;
+    }
+  
+    .sidebar {
+      @apply fixed top-0 left-0 h-full w-full bg-gray-800 text-white p-6;
+      z-index: 100;
+    }
+  
+    .sidebar-nav {
+      @apply flex flex-col gap-4;
+    }
+  
+    .sidebar-nav button {
+      @apply text-white text-left py-2 px-4 rounded-md;
+    }
+  }
+  
+  
