@@ -15,7 +15,6 @@ const SofaConfigurator = () => {
     couchBack: new THREE.Color(0xee6352), // Coral
   });
 
-  const [seatThickness, setSeatThickness] = useState(0.8); // Default seat thickness
   const [legHeight, setLegHeight] = useState(0.2); // Default leg height
   const [baseHeight, setBaseHeight] = useState(0.15); // Default base height
   const [modelLoaded, setModelLoaded] = useState(false);
@@ -28,7 +27,7 @@ const SofaConfigurator = () => {
 
   useEffect(() => {
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff); // Set scene background to white
+    scene.background = new THREE.Color(0x1a1a1a); // Dark background
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -133,8 +132,6 @@ const SofaConfigurator = () => {
       let seatWidth;
       if (section === '3-seater') {
         seatWidth = 1.5;
-      } else if (section === '4-seater') {
-        seatWidth = 2;
       } else {
         seatWidth = 1;
       }
@@ -151,39 +148,6 @@ const SofaConfigurator = () => {
       }
     }
   };
-
-  const handleSeatThicknessChange = (increment) => {
-    const newThickness = seatThickness + increment;
-  
-    // Ensure the thickness stays within a reasonable range (e.g., 0.5 to 1.5)
-    if (newThickness < 0.5 || newThickness > 1.5) return;
-  
-    if (seatObject) {
-      // Get the initial bounding box of the seat object to determine the original height
-      const bbox = new THREE.Box3().setFromObject(seatObject);
-      const originalHeight = bbox.max.y - bbox.min.y;
-  
-      // Calculate the scaling factor for the Y axis
-      const scaleY = newThickness / originalHeight;
-  
-      // Keep the X and Z scales as they were before, only adjust the Y scale
-      seatObject.scale.set(seatObject.scale.x, scaleY, seatObject.scale.z);
-  
-      // Recalculate the new bounding box after the scaling
-      const bboxAfterScale = new THREE.Box3().setFromObject(seatObject);
-      const newHeight = bboxAfterScale.max.y - bboxAfterScale.min.y;
-  
-      // Calculate the difference in height caused by scaling
-      const heightDifference = newHeight - originalHeight;
-  
-      // Adjust the Y position by the height difference, without shifting the seat
-      seatObject.position.y -= heightDifference / 2;
-  
-      // Update the state with the new thickness value
-      setSeatThickness(newThickness);
-    }
-  };
-  
 
   const handleLegHeightChange = (increment) => {
     let newHeight = legHeight + increment;
@@ -228,8 +192,8 @@ const SofaConfigurator = () => {
   }, [section]);
 
   return (
-    <div className="flex min-h-screen">
-      <div className="w-1/4 bg-gray-100 p-6">
+    <div className="flex min-h-screen bg-gray-900 text-white">
+      <div id="sidebar" className="w-1/4 bg-gray-800 p-6">
         <h2 className="text-xl font-semibold mb-4">Customize Your Sofa</h2>
         <div className="space-y-6">
           <div className="space-y-2">
@@ -252,11 +216,6 @@ const SofaConfigurator = () => {
 
           <div className="space-y-4">
             <div>
-              <label className="text-sm font-medium">Seat Thickness: {seatThickness.toFixed(2)}x</label>
-              <input type="range" min="0.5" max="1.5" step="0.05" value={seatThickness} onChange={(e) => handleSeatThicknessChange(e.target.value - seatThickness)} className="w-full" />
-            </div>
-
-            <div>
               <label className="text-sm font-medium">Leg Height: {legHeight.toFixed(2)} m</label>
               <input type="range" min="0.1" max="0.4" step="0.01" value={legHeight} onChange={(e) => handleLegHeightChange(e.target.value - legHeight)} className="w-full" />
             </div>
@@ -269,21 +228,20 @@ const SofaConfigurator = () => {
 
           <div className="space-y-2">
             <label className="text-sm font-medium">Select Sofa Section:</label>
-            <select value={section} onChange={handleSectionChange} className="w-full p-2 border border-gray-300 rounded-md">
+            <select value={section} onChange={handleSectionChange} className="w-full p-2 border border-gray-600 rounded-md bg-gray-700 text-white">
               <option value="2-seater">2-Seater</option>
               <option value="3-seater">3-Seater</option>
-              <option value="4-seater">4-Seater</option>
             </select>
           </div>
 
           <div className="flex gap-4">
-            <button onClick={handleZoomIn} className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">+</button>
-            <button onClick={handleZoomOut} className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">-</button>
+            <button onClick={handleZoomIn} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center">+</button>
+            <button onClick={handleZoomOut} className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center">-</button>
           </div>
         </div>
       </div>
 
-      <div className="w-3/4 bg-white flex justify-center items-center">
+      <div id="viewer" className="w-3/4 bg-gray-900 flex justify-center items-center">
         <div ref={mountRef} className="w-full h-full" />
       </div>
     </div>
