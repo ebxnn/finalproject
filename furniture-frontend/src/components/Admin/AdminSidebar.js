@@ -1,15 +1,14 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; // Import toast
+import { toast } from 'react-toastify';
 
 const AdminSidebar = ({ activeSection, setActiveSection }) => {
-  const navigate = useNavigate(); // Use useNavigate for programmatic navigation
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear any authentication tokens or user data from local storage
-    localStorage.removeItem('authToken'); // Adjust based on how you handle authentication
-    toast.success('Logged out successfully!', { autoClose: 3000 }); // Show toast notification for 3 seconds
-    navigate('/login'); // Redirect to the login page
+    localStorage.removeItem('authToken');
+    toast.success('Logged out successfully!', { autoClose: 3000 });
+    navigate('/login');
   };
 
   return (
@@ -37,6 +36,12 @@ const AdminSidebar = ({ activeSection, setActiveSection }) => {
           <li className={`px-4 py-2 rounded-lg ${activeSection === 'users' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
             <Link to="/admin/users" onClick={() => setActiveSection('users')} className="flex items-center text-white">
               Users
+            </Link>
+          </li>
+          {/* Sentiment Analysis Section */}
+          <li className={`px-4 py-2 rounded-lg ${activeSection === 'sentiment' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
+            <Link to="/admin/sentiment" onClick={() => setActiveSection('sentiment')} className="flex items-center text-white">
+              Sentiment Analysis
             </Link>
           </li>
           {/* Logout Button */}

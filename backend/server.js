@@ -26,6 +26,7 @@ import orderViewRoutes from './routes/seller/orderViewRoutes.js';
 import sellerProfileRoutes from './routes/seller/sellerProfileRoutes.js'
 import categoryRoutes from './routes/categoryRoutes.js';
 import adminRoute from './routes/Admin/adminRoutes.js';
+import sentimentRoute from './routes/Admin/sentimentRoutes.js'
 
 const app = express();
 const port = 5000;
@@ -71,6 +72,7 @@ app.use('/api/order/user-orders', allOrderRoutes);
 app.use('/api/seller-orders', orderViewRoutes)
 app.use('/api/sellersProfile', sellerProfileRoutes); // Mount the seller routes
 app.use('/api/category', categoryRoutes); // Mount the category routes
+app.use("/api/sentiment", sentimentRoute);
 
 app.use('/api/admin/analytics', adminRoute); // Mount the category routes
 app.listen(port, () => {

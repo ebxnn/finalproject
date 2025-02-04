@@ -35,6 +35,7 @@ import DesignerDashboard from './components/designer/DesignerDashboard.js';
 import Sofa from './components/designer/sofa.js';
 import SofaConfigurator from './components/designer/SofaConfigurator.js';
 import CouchConfigurator from './components/designer/couch.js';
+import SentimentAnalysis from './components/Admin/SentimentAnalysis.js';
 
 const App = () => (
   <Router>
@@ -72,7 +73,7 @@ const App = () => (
       <Route path="/sofa-1" element={<Sofa />} />
       <Route path="/sofa-2" element={<SofaConfigurator />} />
       <Route path="/sofa-3" element={<CouchConfigurator />} />
-
+      <Route path="/admin/sentiment" element={<SentimentAnalysis />} />
     </Routes>
   </Router>
 );
