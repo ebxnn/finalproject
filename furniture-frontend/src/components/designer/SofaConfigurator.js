@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import './style.css'; // Ensure you include your custom styles for the buttons
 import objModel from './models/couch2.obj';
 import mtlModel from './models/couch2.mtl';
 
@@ -229,53 +228,63 @@ const SofaConfigurator = () => {
   }, [section]);
 
   return (
-    <div className="container">
-      <div className="sidebar">
-        <h2>Customize Your Sofa</h2>
-        <div className="color-controls">
-          {[
-            { name: 'seat', label: 'Seat' },
-            { name: 'base', label: 'Base' },
-            { name: 'leg', label: 'Leg' },
-            { name: 'couchBack', label: 'Couch Back' },
-          ].map(({ name, label }) => (
-            <div key={name} className="color-picker">
-              <label>{`${label} Color`}</label>
-              <div>
-                <button onClick={() => handleColorChange(name, '#67b0a6')} style={{ backgroundColor: '#67b0a6' }}></button>
-                <button onClick={() => handleColorChange(name, '#ee6352')} style={{ backgroundColor: '#ee6352' }}></button>
-                <button onClick={() => handleColorChange(name, '#546e7a')} style={{ backgroundColor: '#546e7a' }}></button>
+    <div className="flex min-h-screen">
+      <div className="w-1/4 bg-gray-100 p-6">
+        <h2 className="text-xl font-semibold mb-4">Customize Your Sofa</h2>
+        <div className="space-y-6">
+          <div className="space-y-2">
+            {[
+              { name: 'seat', label: 'Seat' },
+              { name: 'base', label: 'Base' },
+              { name: 'leg', label: 'Leg' },
+              { name: 'couchBack', label: 'Couch Back' },
+            ].map(({ name, label }) => (
+              <div key={name} className="space-y-1">
+                <label className="text-sm font-medium">{`${label} Color`}</label>
+                <div className="flex gap-2">
+                  <button onClick={() => handleColorChange(name, '#67b0a6')} className="w-8 h-8 rounded-full" style={{ backgroundColor: '#67b0a6' }}></button>
+                  <button onClick={() => handleColorChange(name, '#ee6352')} className="w-8 h-8 rounded-full" style={{ backgroundColor: '#ee6352' }}></button>
+                  <button onClick={() => handleColorChange(name, '#546e7a')} className="w-8 h-8 rounded-full" style={{ backgroundColor: '#546e7a' }}></button>
+                </div>
               </div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Seat Thickness: {seatThickness.toFixed(2)}x</label>
+              <input type="range" min="0.5" max="1.5" step="0.05" value={seatThickness} onChange={(e) => handleSeatThicknessChange(e.target.value - seatThickness)} className="w-full" />
             </div>
-          ))}
-        </div>
 
-        <div className="height-controls">
-          <label>Seat Thickness: {seatThickness.toFixed(2)}x</label>
-          <input type="range" min="0.5" max="1.5" step="0.05" value={seatThickness} onChange={(e) => handleSeatThicknessChange(e.target.value - seatThickness)} />
-          <label>Leg Height: {legHeight.toFixed(2)} m</label>
-          <input type="range" min="0.1" max="0.4" step="0.01" value={legHeight} onChange={(e) => handleLegHeightChange(e.target.value - legHeight)} />
-          <label>Base Height: {baseHeight.toFixed(2)} m</label>
-          <input type="range" min="0.1" max="0.4" step="0.01" value={baseHeight} onChange={(e) => handleBaseHeightChange(e.target.value - baseHeight)} />
-        </div>
+            <div>
+              <label className="text-sm font-medium">Leg Height: {legHeight.toFixed(2)} m</label>
+              <input type="range" min="0.1" max="0.4" step="0.01" value={legHeight} onChange={(e) => handleLegHeightChange(e.target.value - legHeight)} className="w-full" />
+            </div>
 
-        <div className="section-selector">
-          <label>Select Sofa Section:</label>
-          <select value={section} onChange={handleSectionChange}>
-            <option value="2-seater">2-Seater</option>
-            <option value="3-seater">3-Seater</option>
-            <option value="4-seater">4-Seater</option>
-          </select>
-        </div>
+            <div>
+              <label className="text-sm font-medium">Base Height: {baseHeight.toFixed(2)} m</label>
+              <input type="range" min="0.1" max="0.4" step="0.01" value={baseHeight} onChange={(e) => handleBaseHeightChange(e.target.value - baseHeight)} className="w-full" />
+            </div>
+          </div>
 
-        <div className="zoom-controls">
-          <button onClick={handleZoomIn}>Zoom In</button>
-          <button onClick={handleZoomOut}>Zoom Out</button>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Select Sofa Section:</label>
+            <select value={section} onChange={handleSectionChange} className="w-full p-2 border border-gray-300 rounded-md">
+              <option value="2-seater">2-Seater</option>
+              <option value="3-seater">3-Seater</option>
+              <option value="4-seater">4-Seater</option>
+            </select>
+          </div>
+
+          <div className="flex gap-4">
+            <button onClick={handleZoomIn} className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">+</button>
+            <button onClick={handleZoomOut} className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">-</button>
+          </div>
         </div>
       </div>
 
-      <div className="right-side">
-        <div ref={mountRef} />
+      <div className="w-3/4 bg-white flex justify-center items-center">
+        <div ref={mountRef} className="w-full h-full" />
       </div>
     </div>
   );

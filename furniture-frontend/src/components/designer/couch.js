@@ -3,10 +3,10 @@ import * as THREE from 'three';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import './style.css'; // Custom styles for sidebar and UI elements
+import './style.css'; 
 
-import couchObj from './models/couchsofa.obj'; // Path to your couch .obj model
-import couchMtl from './models/couchsofa.mtl'; // Path to your couch .mtl material file
+import couchObj from './models/couchsofa.obj'; 
+import couchMtl from './models/couchsofa.mtl'; 
 
 const CouchConfigurator = () => {
   const mountRef = useRef(null);
@@ -30,15 +30,13 @@ const CouchConfigurator = () => {
 
     mountRef.current.appendChild(renderer.domElement);
 
-    // Lighting
     const ambientLight = new THREE.AmbientLight(0x404040, 1);
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(1, 1, 1).normalize();
     scene.add(ambientLight, directionalLight);
 
-    // Load .mtl and .obj models
     const mtlLoader = new MTLLoader();
-    mtlLoader.setPath('/path/to/textures/'); // set base path for textures
+    mtlLoader.setPath('/path/to/textures/');
     mtlLoader.load(couchMtl, (materials) => {
       materials.preload();
 
@@ -51,15 +49,11 @@ const CouchConfigurator = () => {
         object.castShadow = true;
         object.receiveShadow = true;
 
-        // Traverse the loaded object and apply custom colors dynamically
         object.traverse((child) => {
           if (child.isMesh) {
             const material = child.material;
+            material.map = null;
 
-            // Ensure that textures are removed
-            material.map = null; // Remove any existing texture map
-
-            // Assign colors dynamically for each part (without textures)
             if (child.name === 'mainback') material.color.set(couchMaterial.mainback);
             else if (child.name === 'back1') material.color.set(couchMaterial.back);
             else if (child.name === 'seat') material.color.set(couchMaterial.seat);
@@ -67,7 +61,7 @@ const CouchConfigurator = () => {
             else if (child.name === 'armrest') material.color.set(couchMaterial.armrest);
             else if (child.name === 'legs') material.color.set(couchMaterial.legs);
 
-            material.needsUpdate = true; // Ensure material is updated
+            material.needsUpdate = true;
           }
         });
 
@@ -75,7 +69,6 @@ const CouchConfigurator = () => {
       });
     });
 
-    // Orbit controls
     const controls = new OrbitControls(camera, renderer.domElement);
     camera.position.set(0, 2, 8);
     controls.update();
@@ -90,7 +83,6 @@ const CouchConfigurator = () => {
 
     return () => {
       if (mountRef.current) {
-        // Clean up the Three.js renderer
         const rendererElement = mountRef.current.querySelector('canvas');
         if (rendererElement) {
           mountRef.current.removeChild(rendererElement);
@@ -99,7 +91,6 @@ const CouchConfigurator = () => {
     };
   }, [couchMaterial]); 
 
-  // Handler for color changes
   const handleColorChange = (part, color) => {
     setCouchMaterial((prev) => ({
       ...prev,
@@ -108,48 +99,32 @@ const CouchConfigurator = () => {
   };
 
   return (
-    <div className="container">
-      <div className="sidebar">
-        <h2>Customize Your Couch</h2>
-
-        {/* Color controls for different parts */}
-        <div className="color-section">
-          <h3>Body Parts</h3>
-
-          <div className="color-group">
-            <h4>Main Back</h4>
-            <input type="color" value={couchMaterial.mainback} onChange={(e) => handleColorChange('mainback', e.target.value)} />
-          </div>
-
-          <div className="color-group">
-            <h4>Back</h4>
-            <input type="color" value={couchMaterial.back} onChange={(e) => handleColorChange('back', e.target.value)} />
-          </div>
-
-          <div className="color-group">
-            <h4>Seat</h4>
-            <input type="color" value={couchMaterial.seat} onChange={(e) => handleColorChange('seat', e.target.value)} />
-          </div>
-
-          <div className="color-group">
-            <h4>Base</h4>
-            <input type="color" value={couchMaterial.base} onChange={(e) => handleColorChange('base', e.target.value)} />
-          </div>
-
-          <div className="color-group">
-            <h4>Armrest</h4>
-            <input type="color" value={couchMaterial.armrest} onChange={(e) => handleColorChange('armrest', e.target.value)} />
-          </div>
-
-          <div className="color-group">
-            <h4>Legs</h4>
-            <input type="color" value={couchMaterial.legs} onChange={(e) => handleColorChange('legs', e.target.value)} />
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-md-4">
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Customize Your Couch</h5>
+              <div className="form-group">
+                {Object.keys(couchMaterial).map((part) => (
+                  <div key={part}>
+                    <label>{part.charAt(0).toUpperCase() + part.slice(1)}</label>
+                    <input 
+                      type="color" 
+                      value={couchMaterial[part]} 
+                      onChange={(e) => handleColorChange(part, e.target.value)} 
+                      className="form-control"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="right-side">
-        <div ref={mountRef} />
+        <div className="col-md-8">
+          <div ref={mountRef} style={{ width: '100%', height: '80vh' }} />
+        </div>
       </div>
     </div>
   );

@@ -68,9 +68,8 @@ const ModelViewer = ({ objUrl, mtlUrl }) => {
 
 const DesignerDashboard = () => {
   const [models, setModels] = useState([
-    { _id: "1", name: "Modern Sofa", category: "Living Room", objUrl: sofaModelObj, mtlUrl: sofaModelMtl, status: "pending" },
-    { _id: "2", name: "Wooden Table", category: "Dining Room", objUrl: tableModelObj, mtlUrl: tableModelMtl, status: "pending" },
-    { _id: "3", name: "Luxury Chair", category: "Office", objUrl: chairModelObj, mtlUrl: chairModelMtl, status: "pending" },
+    { _id: "1", name: "Modern Sofa", category: "Living Room", objUrl: sofaModelObj, mtlUrl: sofaModelMtl},
+    { _id: "2", name: "Modern Couch", category: "Living Room", objUrl: tableModelObj, mtlUrl: tableModelMtl },
   ]);
 
   const navigate = useNavigate(); // Use useNavigate hook for navigation

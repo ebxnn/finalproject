@@ -52,7 +52,8 @@ function Login() {
           if (role.toLowerCase() === 'admin') {
             navigate('/admin');
           } else if (role.toLowerCase() === 'seller') {
-            navigate('/stocks');
+            navigate('/stocks');}else if (role.toLowerCase() === 'designer') {
+              navigate('/designer');
           } else {
             navigate('/');
           }
