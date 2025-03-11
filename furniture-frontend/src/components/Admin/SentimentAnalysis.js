@@ -19,7 +19,7 @@ const SentimentAnalysis = () => {
       console.log("Sending prompt:", customPrompt);
       
       const response = await axios.post(
-        "https://mernstack-pro.onrender.com/api/sentiment/analyze",
+        "https://finalprojectqwq.onrender.com/api/sentiment/analyze",
         {
           prompt: customPrompt || "Analyze this order data and provide insights about sales performance, customer behavior, and product popularity."
         }

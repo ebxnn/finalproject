@@ -20,7 +20,7 @@ const AllOrders = () => {
       }
 
       try {
-        const response = await axios.get('https://mernstack-pro.onrender.com/api/order/user-orders', {
+        const response = await axios.get('https://finalprojectqwq.onrender.com/api/order/user-orders', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

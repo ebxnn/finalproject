@@ -17,7 +17,7 @@ const SearchResultsPage = () => {
   const query = new URLSearchParams(location.search).get('query'); // Get search query from URL
 
   // Hardcoded base URL
-  const BASE_URL = 'https://mernstack-pro.onrender.com'; // Just the base URL
+  const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Just the base URL
 
   useEffect(() => {
     fetchSearchResults();

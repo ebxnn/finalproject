@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 // Hardcoded base URL
-const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your actual base URL
+const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Change this to your actual base URL
 
 const AdminProductPage = () => {
   const [products, setProducts] = useState([]);

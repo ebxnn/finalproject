@@ -20,7 +20,7 @@ const TransactionList = () => {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get('https://mernstack-pro.onrender.com/api/orders/blockchain-transactions');
+        const response = await axios.get('https://finalprojectqwq.onrender.com/api/orders/blockchain-transactions');
         setTransactions(response.data);
         setLoading(false);
       } catch (error) {

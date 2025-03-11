@@ -185,8 +185,8 @@ const StockManagement = () => {
     if (!validateForm()) return;
 
     const url = editMode
-      ? `https://mernstack-pro.onrender.com/api/products/edit/${editProductId}`
-      : 'https://mernstack-pro.onrender.com/api/products/add';
+      ? `https://finalprojectqwq.onrender.com/api/products/edit/${editProductId}`
+      : 'https://finalprojectqwq.onrender.com/api/products/add';
 
     const method = editMode ? 'PUT' : 'POST';
 
@@ -215,7 +215,7 @@ const StockManagement = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('https://mernstack-pro.onrender.com/api/products/view');
+      const response = await fetch('https://finalprojectqwq.onrender.com/api/products/view');
       if (response.ok) {
         const data = await response.json();
         setProducts(data);
@@ -231,7 +231,7 @@ const StockManagement = () => {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const response = await fetch(`https://mernstack-pro.onrender.com/api/products/delete/${id}`, {
+        const response = await fetch(`https://finalprojectqwq.onrender.com/api/products/delete/${id}`, {
           method: 'DELETE',
         });
 

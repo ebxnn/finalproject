@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
 
 // Define the base URL
-const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your production URL when deploying
+const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Change this to your production URL when deploying
 
 const AdminUsersPage = () => {
     const [users, setUsers] = useState([]);

@@ -34,7 +34,7 @@ function Signup() {
 
     try {
       // Send signup data and request OTP
-      const response = await axios.post('https://mernstack-pro.onrender.com/api/signup/send-otp', formData, {
+      const response = await axios.post('https://finalprojectqwq.onrender.com/api/signup/send-otp', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -55,7 +55,7 @@ function Signup() {
   const handleOtpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://mernstack-pro.onrender.com/api/signup/verify-otp', { email, otp }, {
+      const response = await axios.post('https://finalprojectqwq.onrender.com/api/signup/verify-otp', { email, otp }, {
         headers: {
           'Content-Type': 'application/json',
         },

@@ -86,7 +86,7 @@ const Checkout = () => {
   const [setupState, setSetupState] = useState('idle'); // idle, adding, switching, ready
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const BASE_URL = 'https://mernstack-pro.onrender.com';
+  const BASE_URL = 'https://finalprojectqwq.onrender.com';
 
   useEffect(() => {
     const fetchCartItems = async () => {

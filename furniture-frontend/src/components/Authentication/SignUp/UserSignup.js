@@ -21,7 +21,7 @@ function UserSignup() {
   const navigate = useNavigate();
 
   // Define base URL and endpoints
-  const BASE_URL = 'https://mernstack-pro.onrender.com';
+  const BASE_URL = 'https://finalprojectqwq.onrender.com';
   const SEND_OTP_ENDPOINT = '/api/user/signup/send-otp';
   const VERIFY_OTP_ENDPOINT = '/api/user/signup/verify-otp';
 

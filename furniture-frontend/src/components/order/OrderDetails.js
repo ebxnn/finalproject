@@ -34,7 +34,7 @@ const OrderDetails = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const { orderId } = useParams();
-  const BASE_URL = 'https://mernstack-pro.onrender.com';
+  const BASE_URL = 'https://finalprojectqwq.onrender.com';
 
   useEffect(() => {
     const fetchOrderDetails = async () => {

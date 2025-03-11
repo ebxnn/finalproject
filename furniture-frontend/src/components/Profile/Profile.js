@@ -38,7 +38,7 @@ const Profile = () => {
     const navigate = useNavigate();
 
     // Hardcoded base URL without the /api
-    const BASE_URL = 'https://mernstack-pro.onrender.com'; // Just the base URL
+    const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Just the base URL
 
     useEffect(() => {
         const fetchUserProfile = async () => {

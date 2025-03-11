@@ -19,7 +19,7 @@ import {
 } from '@mui/material';
 
 // Hardcoded base URL
-const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your actual base URL
+const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Change this to your actual base URL
 
 const ViewProducts = () => {
   const [products, setProducts] = useState([]);

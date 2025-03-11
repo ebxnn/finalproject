@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate for naviga
 import './Cart.css'; // Import the new design
 
 // Hardcoded base URL
-const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your actual base URL
+const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Change this to your actual base URL
 
 const Cart = () => {
   const [cartItems, setCartItems] = useState([]);

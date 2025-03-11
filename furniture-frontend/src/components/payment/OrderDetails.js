@@ -42,7 +42,7 @@ const OrderDetails = () => {
   const [loading, setLoading] = useState(true);
   const [isDownloading, setIsDownloading] = useState(false);
   const [showReceipt, setShowReceipt] = useState(false);
-  const BASE_URL = 'https://mernstack-pro.onrender.com';
+  const BASE_URL = 'https://finalprojectqwq.onrender.com';
 
   useEffect(() => {
     const fetchOrderDetails = async () => {

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import AdminSidebar from './AdminSidebar'; // Import the sidebar component
 import 'tailwindcss/tailwind.css';
 
-const BASE_URL = 'https://mernstack-pro.onrender.com'; // Hardcoded base URL without api/admin
+const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Hardcoded base URL without api/admin
 
 const AdminDashboard = () => {
   const [sellers, setSellers] = useState([]);

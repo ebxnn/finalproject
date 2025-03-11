@@ -13,7 +13,7 @@ import {
   Alert
 } from '@mui/material';
 
-const BASE_URL = 'https://mernstack-pro.onrender.com';
+const BASE_URL = 'https://finalprojectqwq.onrender.com';
 
 const categories = {
   'Furniture': ['Chair', 'Table', 'Sofa', 'Bed', 'Desk', 'Bookshelf', 'Cabinet'],

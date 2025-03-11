@@ -27,7 +27,7 @@ const ChatBot = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('https://mernstack-pro.onrender.com/api/chat/message', {
+      const response = await axios.post('https://finalprojectqwq.onrender.com/api/chat/message', {
         message: userMessage
       });
       

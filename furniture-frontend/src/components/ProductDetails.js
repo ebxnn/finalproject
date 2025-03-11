@@ -23,7 +23,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './ProductDetails.css';
 
 // Hardcoded base URL
-const BASE_URL = 'https://mernstack-pro.onrender.com';
+const BASE_URL = 'https://finalprojectqwq.onrender.com';
 
 const ProductDetails = () => {
   const { id } = useParams();

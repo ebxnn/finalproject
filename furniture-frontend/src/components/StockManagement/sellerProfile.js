@@ -17,7 +17,7 @@ const ProfileView = ({ baseUrl }) => {
     const fetchSellerDetails = async () => {
       setLoading(true);
       try {
-        const response = await fetch('https://mernstack-pro.onrender.com/api/sellersProfile/me', {
+        const response = await fetch('https://finalprojectqwq.onrender.com/api/sellersProfile/me', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('authToken')}`,  // Send token from localStorage

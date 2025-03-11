@@ -52,7 +52,7 @@ const AdminHome = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await axios.get('https://mernstack-pro.onrender.com/api/admin/analytics');
+      const response = await axios.get('https://finalprojectqwq.onrender.com/api/admin/analytics');
       setAnalytics(response.data);
       setLoading(false);
     } catch (err) {

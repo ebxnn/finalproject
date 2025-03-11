@@ -8,7 +8,7 @@ import axios from 'axios';
 import ChatBot from "./ChatBot/ChatBot";
 
 // Hardcoded base URL
-const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your actual base URL
+const BASE_URL = 'https://finalprojectqwq.onrender.com'; // Change this to your actual base URL
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
