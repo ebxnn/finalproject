@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 // Hardcoded base URL (update this to your server's URL)
-const BASE_URL = 'http://localhost:5000'; 
+const BASE_URL = 'https://mernstack-pro.onrender.com'; 
 
 const BedsPage = () => {
   const [products, setProducts] = useState([]);

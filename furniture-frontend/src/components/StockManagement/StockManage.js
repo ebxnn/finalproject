@@ -22,7 +22,7 @@ import AddProduct from './AddProduct';
 import ViewProducts from './ViewProduct';
 import ViewOrders from './ViewOrders';
 
-const BASE_URL = 'http://localhost:5000'; // Hardcoded base URL
+const BASE_URL = 'https://mernstack-pro.onrender.com'; // Hardcoded base URL
 
 const StockManagement = () => {
   const [activeView, setActiveView] = useState('add');

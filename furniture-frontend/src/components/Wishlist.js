@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import './WishlistPage.css'; // Importing the CSS
 
 // Hardcoded base URL
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = 'https://mernstack-pro.onrender.com';
 
 const Wishlist = () => {
   const [wishlistItems, setWishlistItems] = useState([]);

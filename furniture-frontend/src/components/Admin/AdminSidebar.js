@@ -11,6 +11,11 @@ const AdminSidebar = ({ activeSection, setActiveSection }) => {
     navigate('/login');
   };
 
+  const handleSentimentClick = () => {
+    setActiveSection('sentiment');
+    navigate('/admin/sentiment');
+  };
+
   return (
     <div className="fixed top-0 left-0 h-full w-64 bg-gray-800 shadow-lg">
       <div className="flex justify-center items-center h-16 border-b border-gray-700">
@@ -38,11 +43,17 @@ const AdminSidebar = ({ activeSection, setActiveSection }) => {
               Users
             </Link>
           </li>
-          {/* Sentiment Analysis Section */}
+          {/* Sentiment Analysis Button */}
           <li className={`px-4 py-2 rounded-lg ${activeSection === 'sentiment' ? 'bg-gray-700' : 'hover:bg-gray-700'}`}>
-            <Link to="/admin/sentiment" onClick={() => setActiveSection('sentiment')} className="flex items-center text-white">
+            <button 
+              type="button"
+              id="sentanalyze"
+              data-testid="sentiment-button"
+              onClick={handleSentimentClick}
+              className="flex items-center text-white w-full text-left px-2 py-1"
+            >
               Sentiment Analysis
-            </Link>
+            </button>
           </li>
           {/* Logout Button */}
           <li className="px-4 py-2 rounded-lg hover:bg-gray-700 cursor-pointer">

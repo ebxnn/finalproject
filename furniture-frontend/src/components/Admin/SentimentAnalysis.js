@@ -2,36 +2,76 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaBox, FaDollarSign, FaSmile, FaTrophy } from "react-icons/fa";
 import AdminSidebar from "./AdminSidebar";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SentimentAnalysis = () => {
   const [sentimentData, setSentimentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [activeSection, setActiveSection] = useState("sentiment"); // Track active sidebar section
+  const [activeSection, setActiveSection] = useState("sentiment");
+  const [customPrompt, setCustomPrompt] = useState('');
+
+  const fetchSentiment = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      console.log("Sending prompt:", customPrompt);
+      
+      const response = await axios.post(
+        "https://mernstack-pro.onrender.com/api/sentiment/analyze",
+        {
+          prompt: customPrompt || "Analyze this order data and provide insights about sales performance, customer behavior, and product popularity."
+        }
+      );
+      
+      setSentimentData(response.data);
+    } catch (err) {
+      console.error("Error details:", err.response || err);
+      const errorMessage = err.response?.data?.details || err.response?.data?.error || "Failed to fetch sentiment analysis";
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchSentiment = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/sentiment/analyze");
-        setSentimentData(response.data);
-      } catch (err) {
-        setError("Failed to fetch sentiment analysis");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchSentiment();
   }, []);
 
+  const handleAnalyze = () => {
+    setLoading(true);
+    fetchSentiment();
+  };
+
   return (
     <div className="flex bg-gray-100 min-h-screen">
-      {/* Sidebar */}
+      <ToastContainer />
       <AdminSidebar activeSection={activeSection} setActiveSection={setActiveSection} />
 
-      {/* Main Content */}
       <div className="ml-64 p-8 w-full">
         <h2 className="text-2xl font-semibold mb-6 text-gray-800">📊 Order Sentiment Analysis</h2>
+
+        {/* Custom Prompt Input */}
+        <div className="bg-white shadow-md p-6 rounded-lg mb-6">
+          <h3 className="text-lg font-semibold mb-2">Custom Analysis Prompt</h3>
+          <textarea
+            value={customPrompt}
+            id="sentimentext"
+            onChange={(e) => setCustomPrompt(e.target.value)}
+            placeholder="Enter your custom analysis prompt..."
+            className="w-full p-3 border rounded-md mb-3"
+            rows={3}
+          />
+          <button
+            onClick={handleAnalyze}
+            id="analyze"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Analyze
+          </button>
+        </div>
 
         {loading ? (
           <p className="text-gray-700 text-lg">Loading sentiment analysis...</p>
@@ -53,7 +93,7 @@ const SentimentAnalysis = () => {
               <FaDollarSign className="text-green-500 text-3xl" />
               <div>
                 <p className="text-gray-600">Total Revenue</p>
-                <h3 className="text-xl font-semibold">${sentimentData.totalRevenue.toFixed(2)}</h3>
+                <h3 className="text-xl font-semibold">₹{sentimentData.totalRevenue.toFixed(2)}</h3>
               </div>
             </div>
 
@@ -70,14 +110,19 @@ const SentimentAnalysis = () => {
             <div className="bg-white shadow-md p-6 rounded-lg md:col-span-3">
               <div className="flex items-center space-x-4 mb-4">
                 <FaSmile className="text-purple-500 text-3xl" />
-                <h3 className="text-xl font-semibold text-gray-700">Overall Sentiment</h3>
+                <h3 className="text-xl font-semibold text-gray-700">Analysis Results</h3>
               </div>
-              <ul className="list-disc pl-6 text-gray-700">
-                <li><strong>📦 Total Orders:</strong> {sentimentData.totalOrders} - Indicates strong demand and customer satisfaction.</li>
-                <li><strong>💰 Total Revenue:</strong> ${sentimentData.totalRevenue.toFixed(2)} - Reflects high customer spending & confidence.</li>
-                <li><strong>🏆 Most Ordered Product:</strong> {sentimentData.mostOrderedProduct} - A popular choice among customers.</li>
-                <li><strong>📈 Sentiment:</strong> {sentimentData.sentiment} - Business appears to be thriving with strong customer trust.</li>
-              </ul>
+              <div className="text-gray-700">
+                {Array.isArray(sentimentData.sentiment) ? (
+                  <ul className="list-disc pl-6">
+                    {sentimentData.sentiment.map((point, index) => (
+                      <li key={index}>{point}</li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>{sentimentData.sentiment}</p>
+                )}
+              </div>
             </div>
           </div>
         )}

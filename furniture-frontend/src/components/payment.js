@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 // Hardcoded base URL without the /api part
-const BASE_URL = 'http://localhost:5000'; 
+const BASE_URL = 'https://mernstack-pro.onrender.com'; 
 
 const RazorpayCheckout = ({ totalAmount }) => {
   const [loading, setLoading] = useState(false);

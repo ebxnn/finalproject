@@ -3,6 +3,9 @@ import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
 import Product from '../../models/ProductReviewModel.js';  // Ensure this path is correct
+import simpleBlockchainService from '../../services/simpleBlockchainService.js';
+import pinataService from '../../services/pinataService.js';
+import ethers from 'ethers';
 
 dotenv.config();
 
@@ -10,6 +13,14 @@ const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
+
+// Add network configuration
+const NETWORK_CONFIG = {
+  chainId: 80002,
+  name: 'Polygon Amoy Testnet',
+  rpcUrl: 'https://polygon-amoy.drpc.org',
+  currency: 'POL'
+};
 
 // Create Order
 export const createOrder = async (req, res) => {
@@ -100,63 +111,119 @@ export const createOrder = async (req, res) => {
   }
 };
 
-// Verify Payment
+// Update the verifyPayment function
 export const verifyPayment = async (req, res) => {
   try {
-    const { orderId, paymentId, razorpaySignature } = req.body;
+    const { orderId, blockchainPayment } = req.body;
 
-    console.log('Received data:', { orderId, paymentId, razorpaySignature });
-
-    // Find the order by ID
     const order = await Order.findById(orderId).populate('items.product');
     if (!order) {
-      console.error('Order not found for ID:', orderId);
       return res.status(404).json({ message: 'Order not found.' });
     }
 
-    if (!order.razorpayOrderId) {
-      console.error('Invalid Razorpay Order ID in order data:', order);
-      return res.status(400).json({ message: 'Invalid order data for verification.' });
-    }
-
-    // Generate a signature to compare
-    const generatedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-      .update(`${order.razorpayOrderId}|${paymentId}`)
-      .digest('hex');
-
-    if (generatedSignature !== razorpaySignature) {
-      console.error('Payment verification failed. Generated signature mismatch.');
-      return res.status(400).json({ message: 'Payment verification failed due to invalid signature.' });
-    }
-
-    // Mark the order as paid
-    order.paymentStatus = 'paid';
-    order.paymentId = paymentId;
-    await order.save();
-
-    // Update stock quantities
-    const updateStockPromises = order.items.map(async (item) => {
-      const product = await Product.findById(item.product);
-      if (product) {
-        if (product.stockQuantity >= item.quantity) {
-          product.stockQuantity -= item.quantity;
-          await product.save({ validateBeforeSave: false }); // Skip validation if not necessary
-        } else {
-          console.error('Insufficient stock for product:', product.name);
-          throw new Error(`Insufficient stock for product: ${product.name}`);
-        }
-      } else {
-        console.error('Product not found for ID:', item.product);
-        throw new Error(`Product not found: ${item.product}`);
+    // Verify the transaction
+    const provider = new ethers.providers.JsonRpcProvider(NETWORK_CONFIG.rpcUrl);
+    
+    try {
+      // Get transaction receipt
+      const txReceipt = await provider.getTransactionReceipt(blockchainPayment.transactionHash);
+      
+      if (!txReceipt) {
+        return res.status(400).json({ 
+          message: 'Transaction not found on blockchain'
+        });
       }
-    });
 
-    await Promise.all(updateStockPromises);
+      if (txReceipt.status !== 1) {
+        return res.status(400).json({ 
+          message: 'Transaction failed on blockchain'
+        });
+      }
 
-    res.status(200).json({ message: 'Payment verified and stock updated successfully.', order });
+      // Verify transaction details
+      const transaction = await provider.getTransaction(blockchainPayment.transactionHash);
+      
+      // Verify amount
+      const value = ethers.utils.formatEther(transaction.value);
+      if (value !== ethers.utils.formatEther(blockchainPayment.amount)) {
+        return res.status(400).json({ 
+          message: 'Transaction amount mismatch'
+        });
+      }
+
+      // Verify recipient
+      if (transaction.to.toLowerCase() !== process.env.ADMIN_WALLET_ADDRESS.toLowerCase()) {
+        return res.status(400).json({ 
+          message: 'Invalid payment recipient'
+        });
+      }
+
+      // Update order with verified blockchain payment details
+      order.blockchainPayment = {
+        walletAddress: blockchainPayment.walletAddress,
+        transactionHash: blockchainPayment.transactionHash,
+        amount: blockchainPayment.amount,
+        network: NETWORK_CONFIG.name,
+        status: 'Confirmed',
+        verifiedAt: new Date()
+      };
+      order.paymentStatus = 'Paid';
+
+      // Store digital receipt on IPFS
+      const ipfsReceipt = await pinataService.storeReceipt(order);
+      
+      if (ipfsReceipt.error) {
+        console.warn('Receipt generation warning:', ipfsReceipt.error);
+        order.digitalReceipt = {
+          error: ipfsReceipt.error,
+          createdAt: new Date()
+        };
+      } else {
+        order.digitalReceipt = {
+          url: ipfsReceipt.url,
+          imageUrl: ipfsReceipt.imageUrl,
+          ipfsHash: ipfsReceipt.ipfsHash,
+          imageIpfsHash: ipfsReceipt.imageIpfsHash,
+          createdAt: new Date()
+        };
+      }
+
+      await order.save();
+
+      res.status(200).json({ 
+        message: 'Payment verified successfully',
+        order,
+        receiptStatus: ipfsReceipt.error ? 'warning' : 'success',
+        receiptError: ipfsReceipt.error
+      });
+    } catch (error) {
+      console.error('Blockchain verification error:', error);
+      res.status(400).json({ 
+        message: 'Failed to verify transaction on blockchain',
+        error: error.message 
+      });
+    }
   } catch (error) {
-    console.error('Payment verification error:', error.message);
-    res.status(500).json({ message: 'Error verifying payment and updating stock.', error: error.message });
+    console.error('Payment verification error:', error);
+    res.status(500).json({ 
+      message: 'Error verifying payment',
+      error: error.message 
+    });
+  }
+};
+
+export const getBlockchainTransactions = async (req, res) => {
+  try {
+    const orders = await Order.find({
+      'blockchainPayment.transactionHash': { $exists: true }
+    }).select('blockchainPayment totalAmount createdAt');
+
+    res.json(orders);
+  } catch (error) {
+    console.error('Error fetching blockchain transactions:', error);
+    res.status(500).json({ 
+      message: 'Error fetching transactions',
+      error: error.message 
+    });
   }
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, CircularProgress, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const BASE_URL = 'http://localhost:5000'; // Your backend URL
+const BASE_URL = 'https://mernstack-pro.onrender.com'; // Your backend URL
 
 const ViewOrders = () => {
   const [orders, setOrders] = useState([]);

@@ -1,11 +1,12 @@
 import React from "react";
 import AdComponent from "./AdComponent";
+import ChatBot from "./ChatBot/ChatBot";
 
-
-function Home () {
+function Home() {
     return (
         <div>
             <AdComponent />
+            <ChatBot />
         </div>
     );
 }

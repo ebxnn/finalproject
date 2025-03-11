@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 
 // Hardcoded base URL
-const BASE_URL = 'http://localhost:5000'; // Change this to your actual base URL
+const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your actual base URL
 
 const LightingPage = () => {
   const [products, setProducts] = useState([]);

@@ -52,7 +52,7 @@ const AdminHome = () => {
 
   const fetchAnalytics = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/admin/analytics');
+      const response = await axios.get('https://mernstack-pro.onrender.com/api/admin/analytics');
       setAnalytics(response.data);
       setLoading(false);
     } catch (err) {
@@ -157,7 +157,7 @@ const AdminHome = () => {
               <Card>
                 <CardContent>
                   <Typography variant="h6">Total Revenue</Typography>
-                  <Typography variant="h4">${totalRevenue ? totalRevenue.toFixed(2) : '0.00'}</Typography>
+                  <Typography variant="h4">₹{totalRevenue ? totalRevenue.toFixed(2) : '0.00'}</Typography>
                 </CardContent>
               </Card>
             </Grid>

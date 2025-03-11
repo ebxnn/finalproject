@@ -20,7 +20,7 @@ const SellerSignup = () => {
   const navigate = useNavigate();
 
   // Define base URL and endpoints
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = 'https://mernstack-pro.onrender.com';
   const SEND_OTP_ENDPOINT = '/api/seller/signup/send-otp';
   const VERIFY_OTP_ENDPOINT = '/api/seller/signup/verify-otp';
 

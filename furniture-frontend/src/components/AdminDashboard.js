@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import 'tailwindcss/tailwind.css';
 
 // Hardcoded base URL
-const BASE_URL = 'http://localhost:5000'; // Change this to your actual base URL
+const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your actual base URL
 
 const AdminDashboard = () => {
   const [sellers, setSellers] = useState([]);

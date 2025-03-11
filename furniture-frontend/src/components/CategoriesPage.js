@@ -5,9 +5,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
+import ChatBot from "./ChatBot/ChatBot";
 
 // Hardcoded base URL
-const BASE_URL = 'http://localhost:5000'; // Change this to your actual base URL
+const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your actual base URL
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -216,6 +217,7 @@ const addToCart = async (productId) => {
           </div>
         ))}
       </div>
+      <ChatBot />
     </div>
   );
 };

@@ -12,7 +12,7 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false); // New state for password visibility
   const navigate = useNavigate();
 
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = 'https://mernstack-pro.onrender.com';
   const LOGIN_ENDPOINT = '/api/login';
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

@@ -20,6 +20,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { ethers } from 'ethers';
 
 // Create a dark theme using Material-UI's ThemeProvider
 const darkTheme = createTheme({
@@ -48,6 +49,22 @@ const states = [
   'Telangana', 'Tripura', 'Uttarakhand', 'Uttar Pradesh', 'West Bengal'
 ];
 
+// Update the network configuration for Polygon Amoy Testnet
+const AMOY_CHAIN_ID = 80002;
+const AMOY_CHAIN_ID_HEX = '0x13882';
+
+const AMOY_NETWORK = {
+  chainId: AMOY_CHAIN_ID_HEX,
+  chainName: 'Polygon Amoy Testnet',
+  nativeCurrency: {
+    name: 'MATIC', // Changed from POL to MATIC
+    symbol: 'MATIC',
+    decimals: 18
+  },
+  rpcUrls: ['https://rpc-amoy.polygon.technology/'],
+  blockExplorerUrls: ['https://amoy.polygonscan.com/']
+};
+
 const Checkout = () => {
   const [userDetails, setUserDetails] = useState({
     fullName: '',
@@ -63,8 +80,13 @@ const Checkout = () => {
   const [loading, setLoading] = useState(true);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [metamaskConnected, setMetamaskConnected] = useState(false);
+  const [walletAddress, setWalletAddress] = useState('');
+  const [networkReady, setNetworkReady] = useState(false);
+  const [setupState, setSetupState] = useState('idle'); // idle, adding, switching, ready
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const BASE_URL = 'http://localhost:5000';
+  const BASE_URL = 'https://mernstack-pro.onrender.com';
 
   useEffect(() => {
     const fetchCartItems = async () => {
@@ -94,6 +116,66 @@ const Checkout = () => {
     fetchCartItems();
   }, []);
 
+  useEffect(() => {
+    console.log('Admin wallet:', process.env.REACT_APP_ADMIN_WALLET_ADDRESS);
+    console.log('RPC URL:', process.env.REACT_APP_POLYGON_MUMBAI_RPC);
+  }, []);
+
+  useEffect(() => {
+    // Debug log environment variables
+    console.log('Environment Variables:', {
+      adminWallet: process.env.REACT_APP_ADMIN_WALLET_ADDRESS,
+      rpcUrl: process.env.REACT_APP_POLYGON_MUMBAI_RPC
+    });
+  }, []);
+
+  useEffect(() => {
+    const checkNetwork = async () => {
+      if (window.ethereum) {
+        try {
+          const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+          const isConnected = chainId === '0x13881';
+          setNetworkReady(isConnected);
+          setSetupState(isConnected ? 'ready' : 'idle');
+          
+          if (isConnected) {
+            console.log('Already on Mumbai network');
+          }
+        } catch (error) {
+          console.error('Network check error:', error);
+          setNetworkReady(false);
+          setSetupState('idle');
+        }
+      }
+    };
+
+    checkNetwork();
+
+    // Listen for network changes
+    if (window.ethereum) {
+      window.ethereum.on('chainChanged', (chainId) => {
+        const isConnected = chainId === '0x13881';
+        setNetworkReady(isConnected);
+        setSetupState(isConnected ? 'ready' : 'idle');
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (window.ethereum) {
+      // Listen for account changes
+      window.ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length > 0) {
+          setWalletAddress(accounts[0]);
+          setMetamaskConnected(true);
+        } else {
+          setWalletAddress('');
+          setMetamaskConnected(false);
+        }
+      });
+    }
+  }, []);
+
   const handleChange = (e) => {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
@@ -113,53 +195,244 @@ const Checkout = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handlePayment = async () => {
-    if (!handleValidation()) {
-      return;
-    }
-
-    const token = localStorage.getItem('authToken');
-
+  const connectWallet = async () => {
     try {
-      const orderData = { ...userDetails, items };
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to make blockchain payments');
+        return false;
+      }
 
-      const { data } = await axios.post(`${BASE_URL}/api/checkout/create`, orderData, {
-        headers: { Authorization: `Bearer ${token}` },
+      const accounts = await window.ethereum.request({
+        method: 'eth_requestAccounts'
       });
+      
+      setWalletAddress(accounts[0]);
+      setMetamaskConnected(true);
+      toast.success('Wallet connected successfully');
+      return true;
+    } catch (error) {
+      console.error('Wallet connection error:', error);
+      toast.error('Failed to connect wallet');
+      return false;
+    }
+  };
 
-      const options = {
-        key: 'rzp_test_Afc2OwMLThkxdk',
-        amount: data.order.totalAmount,
+  // Add utility function for exponential backoff
+  const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  const getBackoffDelay = (attempt) => Math.min(1000 * Math.pow(2, attempt), 10000); // Max 10 seconds
+
+  const handlePayment = async () => {
+    if (isProcessing) return;
+    setIsProcessing(true);
+    
+    try {
+      // Form validation
+      if (!handleValidation()) {
+        setIsProcessing(false);
+        return;
+      }
+
+      // Check MetaMask installation
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Connect wallet if not connected
+      if (!metamaskConnected) {
+        const connected = await connectWallet();
+        if (!connected) {
+          toast.error('Please connect your wallet first');
+          setIsProcessing(false);
+          return;
+        }
+      }
+
+      // Create order first
+      toast.info('Creating order...');
+      const token = localStorage.getItem('authToken');
+      
+      // Calculate total amount in INR with proper price handling
+      const totalAmountINR = items.reduce((total, item) => {
+        // Ensure price is treated as a number and not multiplied by 100
+        const itemPrice = Number(item.product.price);
+        const quantity = Number(item.quantity);
+        const itemTotal = itemPrice * quantity;
+        
+        console.log(`Item: ${item.product.name}`);
+        console.log(`Price per unit: ₹${itemPrice}`);
+        console.log(`Quantity: ${quantity}`);
+        console.log(`Item total: ₹${itemTotal}`);
+        
+        return total + itemTotal;
+      }, 0);
+
+      // Format total amount for display
+      const formattedTotal = new Intl.NumberFormat('en-IN', {
+        style: 'currency',
         currency: 'INR',
-        name: 'Your Shop',
-        description: 'Test Transaction',
-        order_id: data.razorpayOrderId,
-        handler: async (response) => {
-          try {
-            const verifyResponse = await axios.post(`${BASE_URL}/api/checkout/verify-payment`, {
-              orderId: data.order._id,
-              paymentId: response.razorpay_payment_id,
-              razorpaySignature: response.razorpay_signature,
-            }, { headers: { Authorization: `Bearer ${token}` } });
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(totalAmountINR);
 
-            toast.success('Payment successful! Order placed.');
-            navigate(`/order-details/${data.order._id}`);
-          } catch (error) {
-            toast.error('Payment verification failed. Please contact support.');
-          }
-        },
-        prefill: {
-          name: userDetails.fullName,
-          email: userDetails.email,
-          contact: userDetails.phone,
-        },
-        theme: { color: '#6200ea' }, // Purple color for the Razorpay widget
+      console.log('Final order total:', formattedTotal);
+
+      const orderData = { 
+        ...userDetails, 
+        items: items.map(item => ({
+          ...item,
+          price: Number(item.product.price) // Ensure price is a number
+        })),
+        totalAmount: totalAmountINR
+      };
+      
+      const { data: orderResponse } = await axios.post(
+        `${BASE_URL}/api/checkout/create`, 
+        orderData,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      // Check if already on the correct network
+      const currentChainId = await window.ethereum.request({ method: 'eth_chainId' });
+      console.log('Current chainId:', currentChainId);
+
+      if (currentChainId !== AMOY_CHAIN_ID_HEX) {
+        toast.error('Please connect to the Polygon Amoy Testnet in MetaMask');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Initialize provider with MetaMask
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const userAddress = await signer.getAddress();
+      const adminAddress = process.env.REACT_APP_ADMIN_WALLET_ADDRESS;
+
+      if (!adminAddress) {
+        throw new Error('Admin wallet address not configured');
+      }
+
+      // Get current nonce
+      const nonce = await provider.getTransactionCount(userAddress, 'latest');
+
+      // Get current gas price with higher buffer for Polygon
+      const gasPrice = (await provider.getGasPrice()).mul(150).div(100); // 50% buffer
+      console.log('Adjusted gas price:', ethers.utils.formatUnits(gasPrice, 'gwei'), 'gwei');
+
+      // Use fixed small amount for testing
+      const testAmount = ethers.utils.parseEther('0.0001');
+
+      // Prepare the transaction with higher gas limit
+      const transactionRequest = {
+        from: userAddress,
+        to: adminAddress,
+        value: testAmount,
+        gasLimit: ethers.BigNumber.from('100000'), // Increased gas limit
+        gasPrice: gasPrice,
+        nonce: nonce,
+        chainId: AMOY_CHAIN_ID,
+        type: 0 // Legacy transaction type
       };
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
+      // Check balance with the new gas calculations
+      const balance = await provider.getBalance(userAddress);
+      const totalCost = testAmount.add(
+        transactionRequest.gasLimit.mul(transactionRequest.gasPrice)
+      );
+
+      console.log('Original order amount:', formattedTotal);
+      console.log('Test transaction amount (MATIC):', ethers.utils.formatEther(testAmount));
+      console.log('Balance (MATIC):', ethers.utils.formatEther(balance));
+      console.log('Total cost with gas (MATIC):', ethers.utils.formatEther(totalCost));
+
+      if (balance.lt(totalCost)) {
+        toast.error('Insufficient funds for transaction and gas fees');
+        setIsProcessing(false);
+        return;
+      }
+
+      // Log the final transaction parameters
+      console.log('Transaction parameters:', {
+        from: transactionRequest.from,
+        to: transactionRequest.to,
+        value: ethers.utils.formatEther(transactionRequest.value) + ' MATIC',
+        gasLimit: transactionRequest.gasLimit.toString(),
+        gasPrice: ethers.utils.formatUnits(transactionRequest.gasPrice, 'gwei') + ' gwei',
+        nonce: transactionRequest.nonce,
+        chainId: transactionRequest.chainId,
+        type: transactionRequest.type
+      });
+
+      toast.info('Please confirm the transaction in MetaMask...');
+
+      // Send transaction
+      const tx = await signer.sendTransaction(transactionRequest);
+      console.log('Transaction submitted:', tx.hash);
+      
+      toast.info('Transaction submitted. Waiting for confirmation...');
+
+      // Wait for confirmation with more blocks
+      const receipt = await tx.wait(2); // Wait for 2 confirmations
+      console.log('Transaction confirmed:', receipt);
+
+      // Verify payment
+      toast.info('Verifying payment...');
+      const verificationResponse = await axios.post(
+        `${BASE_URL}/api/checkout/verify-payment`,
+        {
+          orderId: orderResponse.order._id,
+          blockchainPayment: {
+            transactionHash: receipt.transactionHash,
+            walletAddress: userAddress,
+            amount: testAmount.toString(),
+            network: 'Polygon Amoy Testnet',
+            originalAmountINR: totalAmountINR // Send raw number
+          }
+        },
+        { 
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          } 
+        }
+      );
+
+      console.log('Payment verified:', verificationResponse.data);
+      toast.success('Payment successful!');
+      navigate(`/order-details/${orderResponse.order._id}`);
+
     } catch (error) {
-      toast.error('Error processing payment.');
+      console.error('Transaction error:', error);
+      
+      if (error.code === 4001) {
+        toast.error('Transaction rejected by user');
+      } else if (error.code === -32603) {
+        const errorMessage = error.message?.toLowerCase() || '';
+        if (errorMessage.includes('insufficient funds')) {
+          toast.error('Insufficient funds for transaction and gas fees');
+        } else if (errorMessage.includes('nonce')) {
+          toast.error('Please reset your MetaMask account and try again');
+        } else if (errorMessage.includes('underpriced')) {
+          toast.error('Transaction underpriced. Trying again with higher gas price');
+          // Could implement retry logic here with higher gas price
+        } else if (errorMessage.includes('gas')) {
+          toast.error('Gas estimation failed. Please try again');
+        } else {
+          toast.error('Network is congested. Please try again in a few minutes');
+        }
+      } else {
+        toast.error('Transaction failed. Please try again');
+      }
+      
+      console.error('Detailed error:', {
+        code: error.code,
+        message: error.message,
+        data: error.data,
+        stack: error.stack
+      });
+      
+      setIsProcessing(false);
     }
   };
 
@@ -187,7 +460,26 @@ const Checkout = () => {
                       <ListItem style={{ padding: '10px 0' }}>
                         <ListItemText
                           primary={`${item.product.name} (x${item.quantity})`}
-                          secondary={`Price: ₹${item.product.price * item.quantity}`}
+                          secondary={
+                            <>
+                              <Typography component="span" style={{ display: 'block', color: '#b0b0b0' }}>
+                                Price per unit: {new Intl.NumberFormat('en-IN', {
+                                  style: 'currency',
+                                  currency: 'INR',
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2
+                                }).format(Number(item.product.price))}
+                              </Typography>
+                              <Typography component="span" style={{ display: 'block', color: '#b0b0b0' }}>
+                                Total: {new Intl.NumberFormat('en-IN', {
+                                  style: 'currency',
+                                  currency: 'INR',
+                                  minimumFractionDigits: 2,
+                                  maximumFractionDigits: 2
+                                }).format(Number(item.product.price) * Number(item.quantity))}
+                              </Typography>
+                            </>
+                          }
                           style={{ color: '#ffffff' }}
                         />
                       </ListItem>
@@ -200,6 +492,19 @@ const Checkout = () => {
                   </Typography>
                 )}
               </List>
+
+              {items.length > 0 && (
+                <Typography variant="h6" style={{ margin: '20px 0', color: '#ffffff' }}>
+                  Order Total: {new Intl.NumberFormat('en-IN', {
+                    style: 'currency',
+                    currency: 'INR',
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                  }).format(items.reduce((total, item) => 
+                    total + (Number(item.product.price) * Number(item.quantity)), 0
+                  ))}
+                </Typography>
+              )}
 
               <Typography variant="h6" style={{ margin: '20px 0', color: '#ffffff' }}>
                 Shipping Information
@@ -274,20 +579,30 @@ const Checkout = () => {
                 </Grid>
               </Grid>
 
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                style={{
-                  marginTop: '20px',
-                  backgroundColor: '#6200ea',
-                  padding: '12px',
-                  fontWeight: 'bold',
-                }}
-                onClick={handlePayment}
-              >
-                Proceed to Pay
-              </Button>
+              <div className="payment-section" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', marginBottom: '1rem' }}>
+                  <Button
+                    onClick={connectWallet}
+                    variant="contained"
+                    color={metamaskConnected ? "success" : "primary"}
+                    fullWidth
+                  >
+                    {metamaskConnected ? '✓ Wallet Connected' : 'Connect Wallet'}
+                  </Button>
+                </div>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  onClick={handlePayment}
+                  disabled={!metamaskConnected || isProcessing}
+                >
+                  {!metamaskConnected ? 'Connect Wallet First' : 
+                   isProcessing ? 'Processing Payment...' : 
+                   'Pay with MetaMask'}
+                </Button>
+              </div>
             </>
           )}
         </Paper>
