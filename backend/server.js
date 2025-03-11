@@ -33,34 +33,14 @@ const app = express();
 const port = 5000;
 connectDB();
 
-
-
-app.use(cors());
-
-
+// Simple CORS configuration to accept all origins
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 app.use(express.json());
-
-const allowedOrigins = [
-  'http://localhost:3000', // Development
-  'https://bucolic-rolypoly-0bf95e.netlify.app' // Production
-];
-
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true); // Allow request
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: 'GET,POST,DELETE,PATCH',
-  allowedHeaders: 'Content-Type, Authorization',
-};
-
-
-app.use(cors(corsOptions));
-
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
