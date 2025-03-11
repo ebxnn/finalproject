@@ -6,14 +6,7 @@ services:
     startCommand: npm start
     envVars:
       - key: NODE_VERSION
-        value: 18.x
+        value: 18.18.0
     buildFilter:
       paths:
-        - backend/**
-    packages:
-      - build-essential
-      - libcairo2-dev
-      - libpango1.0-dev
-      - libjpeg-dev
-      - libgif-dev
-      - librsvg2-dev 
+        - backend/** 
