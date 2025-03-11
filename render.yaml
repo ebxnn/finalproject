@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: your-app-name
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: 18.x
+    buildFilter:
+      paths:
+        - backend/**
+    packages:
+      - build-essential
+      - libcairo2-dev
+      - libpango1.0-dev
+      - libjpeg-dev
+      - libgif-dev
+      - librsvg2-dev 

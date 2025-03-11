@@ -8,7 +8,7 @@ const BASE_URL = 'https://mernstack-pro.onrender.com'; // Change this to your ac
 const AdminDashboard = () => {
   const [sellers, setSellers] = useState([]);
   const [products, setProducts] = useState([]);
-  const [activeSection, setActiveSection] = useState('sellers'); // Track which section is active
+  // const [activeSection, setActiveSection] = useState('sellers'); // Track which section is active
 
   useEffect(() => {
     fetchSellers();

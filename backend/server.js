@@ -41,11 +41,23 @@ app.use(cors());
 
 app.use(express.json());
 
+const allowedOrigins = [
+  'http://localhost:3000', // Development
+  'https://bucolic-rolypoly-0bf95e.netlify.app' // Production
+];
+
 const corsOptions = {
-  origin: 'http://localhost:3000',  // Frontend URL
-  methods: 'GET,POST,DELETE,PATCH',  // Allowed methods
-  allowedHeaders: 'Content-Type, Authorization',  // Allowed headers
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true); // Allow request
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,POST,DELETE,PATCH',
+  allowedHeaders: 'Content-Type, Authorization',
 };
+
 
 app.use(cors(corsOptions));
 
