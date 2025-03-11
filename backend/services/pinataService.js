@@ -1,5 +1,5 @@
 import pinataSDK from '@pinata/sdk';
-import { createCanvas } from 'canvas';
+import sharp from 'sharp';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -20,65 +20,60 @@ class PinataService {
 
   async generateReceiptImage(order) {
     try {
-      // Create canvas
-      const canvas = createCanvas(800, 1200);
-      const ctx = canvas.getContext('2d');
+      // Create a new SVG with receipt content
+      const svgContent = `
+        <svg width="800" height="1200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="1200" fill="white"/>
+          <style>
+            .title { font: bold 24px sans-serif; }
+            .normal { font: 18px sans-serif; }
+            .small { font: 16px sans-serif; }
+            .bold { font: bold 18px sans-serif; }
+          </style>
+          
+          <text x="40" y="50" class="title">Digital Receipt #${order._id}</text>
+          <text x="40" y="100" class="normal">Customer: ${order.fullName}</text>
+          <text x="40" y="130" class="normal">Date: ${new Date(order.createdAt).toLocaleDateString()}</text>
+          
+          <text x="40" y="180" class="bold">Items:</text>
+          ${order.items?.map((item, index) => {
+            const yPos = 210 + (index * 25);
+            const productName = item.product?.name || 'Product';
+            const price = item.product?.price || 0;
+            return `
+              <text x="40" y="${yPos}" class="small">${productName} x${item.quantity}</text>
+              <text x="600" y="${yPos}" class="small">₹${price * item.quantity}</text>
+            `;
+          }).join('') || ''}
+          
+          <text x="600" y="${210 + ((order.items?.length || 0) * 25) + 20}" class="bold">
+            Total: ₹${order.totalAmount || 0}
+          </text>
+          
+          ${order.blockchainPayment ? `
+            <text x="40" y="${210 + ((order.items?.length || 0) * 25) + 60}" class="small">
+              Transaction Hash: ${order.blockchainPayment.transactionHash || 'N/A'}
+            </text>
+            <text x="40" y="${210 + ((order.items?.length || 0) * 25) + 85}" class="small">
+              Wallet Address: ${order.blockchainPayment.walletAddress || 'N/A'}
+            </text>
+          ` : ''}
+        </svg>
+      `;
 
-      // Set background
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Add receipt content
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 24px Arial';
-      ctx.fillText(`Digital Receipt #${order._id}`, 40, 50);
-
-      ctx.font = '18px Arial';
-      ctx.fillText(`Customer: ${order.fullName}`, 40, 100);
-      ctx.fillText(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 40, 130);
-
-      // Add items
-      let yPos = 180;
-      ctx.font = 'bold 18px Arial';
-      ctx.fillText('Items:', 40, yPos);
-      yPos += 30;
-
-      ctx.font = '16px Arial';
-      if (order.items && Array.isArray(order.items)) {
-        for (const item of order.items) {
-          const productName = item.product?.name || 'Product';
-          const price = item.product?.price || 0;
-          ctx.fillText(`${productName} x${item.quantity}`, 40, yPos);
-          ctx.fillText(`₹${price * item.quantity}`, 600, yPos);
-          yPos += 25;
-        }
-      }
-
-      // Add total
-      yPos += 20;
-      ctx.font = 'bold 18px Arial';
-      const total = order.totalAmount || 0;
-      ctx.fillText(`Total: ₹${total}`, 600, yPos);
-
-      // Add blockchain details
-      if (order.blockchainPayment) {
-        yPos += 40;
-        ctx.font = '16px Arial';
-        ctx.fillText(`Transaction Hash: ${order.blockchainPayment.transactionHash || 'N/A'}`, 40, yPos);
-        yPos += 25;
-        ctx.fillText(`Wallet Address: ${order.blockchainPayment.walletAddress || 'N/A'}`, 40, yPos);
-      }
-
-      // Save image temporarily
+      // Convert SVG to PNG using sharp
       const imagePath = path.join(__dirname, `../../temp/receipt_${order._id}.png`);
-      const buffer = canvas.toBuffer('image/png');
       
       // Ensure temp directory exists
       if (!fs.existsSync(path.join(__dirname, '../../temp'))) {
         fs.mkdirSync(path.join(__dirname, '../../temp'), { recursive: true });
       }
-      
-      fs.writeFileSync(imagePath, buffer);
+
+      // Convert SVG to PNG and save
+      await sharp(Buffer.from(svgContent))
+        .png()
+        .toFile(imagePath);
+
       return imagePath;
     } catch (error) {
       console.error('Error generating receipt image:', error);
@@ -145,3 +140,30 @@ class PinataService {
 }
 
 export default new PinataService(); 
+
+// Example image processing
+async function processImage(buffer) {
+  return sharp(buffer)
+    .resize(800, 600)
+    .jpeg({ quality: 80 })
+    .toBuffer();
+} 
+
+// You might not need canvas at all for this
+async function createMetadata(data) {
+  return {
+    name: data.name,
+    description: data.description,
+    image: data.imageUrl,
+    attributes: data.attributes
+  };
+} 
+
+async function createThumbnail(imageBuffer) {
+  return sharp(imageBuffer)
+    .resize(200, 200, {
+      fit: 'contain',
+      background: { r: 255, g: 255, b: 255, alpha: 1 }
+    })
+    .toBuffer();
+} 
